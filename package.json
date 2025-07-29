@@ -1,0 +1,103 @@
+{
+  "name": "EasyMeeting",
+  "version": "1.0.0",
+  "description": "EasyMeeting",
+  "main": "./out/main/index.js",
+  "author": "example.com",
+  "homepage": "https://electron-vite.org",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint --cache .",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
+  },
+  "build": {
+    "extraResources": [
+      "./assets/**"
+    ],
+    "productName": "EasyMeeting",
+    "appId": "com.easymeeting",
+    "directories": {
+      "output": "installPackages"
+    },
+    "afterSign": "./asarmor.js",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "icons/icon.icns",
+      "artifactName": "${productName}-${version}-${os}.${ext}",
+      "darkModeSupport": true,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "win": {
+      "artifactName": "${productName}Setup.${version}.exe",
+      "icon": "resources/icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./resources/icon.ico",
+      "uninstallerIcon": "./resources/icon.ico",
+      "installerHeaderIcon": "./resources/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "EasyMeeting"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "icons/linux"
+    }
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@ffmpeg/core": "^0.12.10",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "artplayer": "^5.2.3",
+    "axios": "1.8.4",
+    "electron-store": "^8.1.0",
+    "element-plus": "^2.9.7",
+    "js-md5": "^0.8.3",
+    "lunar-calendar": "^0.1.4",
+    "moment": "^2.30.1",
+    "pinia": "^3.0.1",
+    "v-viewer": "^3.0.21",
+    "vue-cookies": "^1.8.6",
+    "vue-router": "^4.5.0",
+    "ws": "8.18.1"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config": "^2.0.0",
+    "@electron-toolkit/eslint-config-prettier": "^3.0.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^3.0.0",
+    "eslint": "^9.20.1",
+    "eslint-plugin-vue": "^9.32.0",
+    "prettier": "^3.5.1",
+    "sass-embedded": "^1.86.0",
+    "vite": "^6.1.0",
+    "vue": "^3.5.13",
+    "asarmor": "^2.0.0"
+  }
+}    
