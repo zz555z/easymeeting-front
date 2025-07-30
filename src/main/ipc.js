@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 import { getWindow } from './windowProxy'
+import { BrowserWindow } from 'electron/main'
 
 const onLoginOrRegister = () => {
   ipcMain.handle('loginOrRegister', (event, isLogin) => {
@@ -18,4 +19,36 @@ const onLoginOrRegister = () => {
   })
 }
 
-export { onLoginOrRegister }
+const onWinTitleOp = () => {
+  ipcMain.on('winTilteOp', (e, { action, data }) => {
+    console.log('当前动作：' + action)
+    const webContents = e.sender
+    const win = BrowserWindow.fromWebContents(webContents)
+    switch (action) {
+      case 'close':
+        console.log('data.closeType---->', data.closeType)
+        if (data.closeType == 0) {
+          win.forceClose = data.forceClose
+          win.close()
+        } else {
+          win.setSkipTaskbar(true)
+          win.hide()
+        }
+        break
+      case 'minimize': {
+        win.minimize()
+        break
+      }
+      case 'maximize': {
+        win.maximize()
+        break
+      }
+      case 'unmaximize': {
+        win.unmaximize()
+        break
+      }
+    }
+  })
+}
+
+export { onLoginOrRegister, onWinTitleOp }

@@ -1,9 +1,11 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import meetingIcon from '../../resources/icon-16x16.png?asset'
 import icon from '../../resources/icon.png?asset'
+
 import { saveWindow } from './windowProxy'
-import { onLoginOrRegister } from './ipc'
+import { onLoginOrRegister, onWinTitleOp } from './ipc'
 
 function createWindow() {
   // Create the browser window.
@@ -29,6 +31,23 @@ function createWindow() {
     mainWindow.show()
   })
 
+  const tray = new Tray(meetingIcon)
+  const contextMenu = [
+    {
+      label: '退出',
+      click: function () {
+        app.quit()
+      }
+    }
+  ]
+  const menu = Menu.buildFromTemplate(contextMenu)
+  tray.setToolTip('EasyMeeting')
+  tray.setContextMenu(menu)
+  tray.on('click', () => {
+    mainWindow.setSkipTaskbar(false)
+    mainWindow.show()
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -41,9 +60,27 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindow.on('maximize', (event) => {
+    mainWindow.webContents.send('winIsMax', true)
+  })
+  mainWindow.on('unmaximize', (event) => {
+    mainWindow.webContents.send('winIsMax', false)
+  })
+  // 监听窗口关闭事件
+  // mainWindow.on('closed', () => {
+  //   // 销毁托盘图标
+  //   if (tray) {
+  //     tray.destroy()
+  //     tray = null
+  //   }
+  //   // 退出应用
+  //   app.quit()
+  // })
 }
 
 onLoginOrRegister()
+onWinTitleOp()
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

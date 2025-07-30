@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header :showMax="false" :closeType="0"></Header>
   <div class="login-panel" v-if="showLoading">
     <img src="../../assets/img/loading.gif" />
     <div>正在登录...</div>
