@@ -37,6 +37,7 @@
           v-model.trim="formData.password"
           show-password
           size="large"
+          maxlength="18"
         >
           <template #prefix>
             <span class="iconfont icon-password"></span>
@@ -51,6 +52,7 @@
           v-model.trim="formData.rePassword"
           show-password
           size="large"
+          maxlength="18"
         >
           <template #prefix>
             <span class="iconfont icon-password"></span>
@@ -59,30 +61,30 @@
       </el-form-item>
       <!--textarea输入-->
 
-      <el-form-item prop="">
+      <el-form-item prop="checkCode">
         <div class="check-code-panel">
           <el-input
             clearable
             placeholder="请输入验证码"
-            v-model.trim="formData.checkcode"
+            v-model.trim="formData.checkCode"
             size="large"
           >
             <template #prefix>
               <span class="iconfont icon-checkcode"></span>
             </template>
           </el-input>
-          <img src="https://picsum.photos/200/100" alt="" />
+          <img :src="checkCodeUrl" class="check-code" @click="changeCheckCode" />
         </div>
       </el-form-item>
 
       <el-form-item prop="">
-        <el-button type="primary" class="login-btn" size="large">{{
+        <el-button type="primary" class="login-btn" size="large" @click="loginOrRegisterSubmit">{{
           isLogin ? '登录' : '注册'
         }}</el-button>
       </el-form-item>
       <div class="bottom-link">
         <span class="a-link no-account" @click="chageOpType">
-          {{ isLogin ? '去注册?' : '去登陆?' }}</span
+          {{ isLogin ? '去注册' : '去登陆' }}</span
         >
       </div>
     </el-form>
@@ -93,30 +95,118 @@
 import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
 const { proxy } = getCurrentInstance()
 import { useRoute, useRouter } from 'vue-router'
+import md5 from 'js-md5'
 const route = useRoute()
 const router = useRouter()
 const isLogin = ref(true)
 const showLoading = ref(false)
 const formData = ref({})
 const formDataRef = ref()
-const rules = {
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码至少6位', trigger: 'blur' }
-  ],
-  checkcode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-}
+const rules = {}
+const salt = 'easymetting'
 
 const errorMsg = ref()
+const checkCodeUrl = ref(null)
+const changeCheckCode = async () => {
+  // console.log('api', proxy.Api.checkCode)
+  let result = await proxy.Request({
+    url: proxy.Api.checkCode
+  })
+  if (!result) {
+    return
+  }
+  checkCodeUrl.value = result.data.checkCode
+  localStorage.setItem('checkCodeKey', result.data.checkCodeKey)
+}
 
 const chageOpType = async () => {
+  await window.electron.ipcRenderer.invoke('loginOrRegister', !isLogin.value)
   isLogin.value = !isLogin.value
-  await window.electron.ipcRenderer.invoke('loginOrRegister', isLogin.value)
+  nextTick(() => {
+    formDataRef.value.resetFields()
+    formData.value = {}
+    changeCheckCode()
+    clearErrorMsg()
+  })
 }
+
+const clearErrorMsg = () => {
+  errorMsg.value = ''
+}
+
+const checkValue = (type, value, msg) => {
+  // debugger
+  if (proxy.Utils.isEmpty(value)) {
+    errorMsg.value = msg
+    return false
+  }
+  if (type && !proxy.Verify[type](value)) {
+    errorMsg.value = msg
+    return false
+  }
+  return true
+}
+const loginOrRegisterSubmit = async () => {
+  clearErrorMsg()
+  if (!checkValue('checkEmail', formData.value.email, '请输入正确的邮箱')) {
+    return
+  }
+
+  if (!isLogin.value && !checkValue(null, formData.value.nickName, '请输入昵称')) {
+    return
+  }
+
+  if (!checkValue('checkPassword', formData.value.password, '密码只能是数字,字母,特殊字符8~18位')) {
+    return
+  }
+
+  if (!checkValue(null, formData.value.checkCode, '请输入验证码')) {
+    return
+  }
+
+  if (!isLogin.value && !checkValue(null, formData.value.rePassword, '请再次输入密码')) {
+    return
+  }
+
+  if (!isLogin.value && formData.value.password !== formData.value.rePassword) {
+    errorMsg.value = '两次输入的密码不一致'
+    return
+  }
+
+  console.log('formData.value', formData.value)
+  console.log('salt', salt)
+  console.log('md5', md5(formData.value.password + salt))
+
+  let result = await proxy.Request({
+    url: isLogin.value ? proxy.Api.login : proxy.Api.register,
+    showError: false,
+    showLoading: false,
+    params: {
+      email: formData.value.email,
+      password: isLogin.value ? md5(formData.value.password + salt) : formData.value.password,
+      checkCode: formData.value.checkCode,
+      checkCodeKey: localStorage.getItem('checkCodeKey'),
+      nickName: isLogin.value ? '' : formData.value.nickName
+    },
+    errorCallback: (error) => {
+      changeCheckCode()
+      errorMsg.value = error.message
+    }
+  })
+  if (!result) {
+    return
+  }
+  // console.log('result', result)
+
+  if (isLogin.value) {
+  } else {
+    console.log('isLogin', isLogin.value)
+    proxy.Message.success('注册成功，请登录')
+    chageOpType()
+  }
+}
+
+changeCheckCode()
 </script>
 
 <style lang="scss" scoped>

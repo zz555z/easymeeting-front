@@ -15,6 +15,18 @@ export default defineConfig({
         '@': resolve('src/renderer/src')
       }
     },
-    plugins: [vue()]
+    plugins: [vue()],
+    server: {
+      historyApiFallback: true,
+      hmr: true,
+      port: 6001,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:6060',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '/api')
+        }
+      }
+    }
   }
 })
