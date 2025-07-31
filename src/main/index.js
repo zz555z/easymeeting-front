@@ -67,16 +67,15 @@ function createWindow() {
   mainWindow.on('unmaximize', (event) => {
     mainWindow.webContents.send('winIsMax', false)
   })
-  // 监听窗口关闭事件
-  // mainWindow.on('closed', () => {
-  //   // 销毁托盘图标
-  //   if (tray) {
-  //     tray.destroy()
-  //     tray = null
-  //   }
-  //   // 退出应用
-  //   app.quit()
-  // })
+  //监听窗口关闭事件
+  mainWindow.on('closed', () => {
+    // 销毁托盘图标
+    if (tray) {
+      tray.destroy()
+    }
+    // 退出应用
+    app.quit()
+  })
 }
 
 onLoginOrRegister()
