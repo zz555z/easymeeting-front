@@ -1,0 +1,195 @@
+<template>
+  <div class="layout">
+    <div class="left">
+      <div class="top-panel">
+        <div class="avatar"></div>
+        <div class="top-menus">
+          <div
+            :class="['menu-item', item.codes.includes(route.meta.code) ? 'active' : '']"
+            v-for="item in leftTopMenus"
+            :key="item.name"
+            @click="jumpMenu(item)"
+          >
+            <!-- {{ item.codes.includes(route.meta.code) }} -->
+            <el-badge
+              :value="item.messageCount"
+              :max="99"
+              :hidden="item.messageCount == 0"
+              :offset="[-5, 0]"
+            >
+              <div :class="['iconfont', 'icon-' + item.icon]"></div>
+              <div class="name">{{ item.name }}</div>
+            </el-badge>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-menus">
+        <template v-for="item in leftBottomMenus">
+          <div
+            :class="['menu-item', item.codes.includes(route.meta.code) ? 'active' : '']"
+            v-if="!item.onlyAdmin || (item.onlyAdmin && userInfoStore.userInfo.admin)"
+            :key="item.name"
+            @click="jumpMenu(item)"
+          >
+            <div :class="['iconfont', 'icon-' + item.icon]"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <div class="right">
+      <router-view></router-view>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+const { proxy } = getCurrentInstance()
+const route = useRoute()
+const router = useRouter()
+import { useUserInfoStore } from '@/store/UserInfoStore'
+const userInfoStore = useUserInfoStore()
+
+// 顶部左侧菜单数据，使用 ref 做响应式处理
+const leftTopMenus = ref([
+  {
+    name: '会议',
+    icon: 'video',
+    path: '/meetingMain',
+    codes: ['meeting'],
+    messageCount: 0
+  },
+  {
+    name: '通讯录',
+    icon: 'add-group',
+    path: '/contact',
+    codes: ['contact'],
+    messageCount: 0
+  },
+  {
+    name: '录制',
+    icon: 'video-play',
+    path: '/screencap',
+    codes: ['screencap'],
+    messageCount: 0
+  }
+])
+
+// 底部左侧菜单数据，普通数组
+const leftBottomMenus = [
+  {
+    icon: 'setting1',
+    path: '/setting',
+    codes: ['setting'],
+    onlyAdmin: false
+  },
+  {
+    icon: 'super_admin',
+    codes: [],
+    btnType: 'admin',
+    onlyAdmin: true
+  }
+]
+</script>
+
+<style lang="scss" scoped>
+.layout {
+  display: flex;
+
+  .left {
+    width: 64px;
+    background: #f3f3f4;
+    margin: 0px auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    -webkit-app-region: drag;
+
+    .top-panel {
+      text-align: center;
+
+      .avatar {
+        display: flex;
+        justify-content: center;
+        -webkit-app-region: no-drag;
+        margin: 40px 0px 20px 0px;
+      }
+    }
+
+    .top-menus {
+      .menu-item {
+        margin-bottom: 30px; // 增加间距
+        text-align: center;
+
+        // ...existing code...
+        .iconfont {
+          font-size: 20px; // 字体更小
+        }
+
+        .name {
+          margin-top: 5px;
+          font-size: 12px;
+        }
+      }
+      .menu-item:last-child {
+        margin-bottom: 0; // 最后一个不加间距
+      }
+      .menu-item.active {
+        .iconfont {
+          color: var(--blue);
+        }
+        .name {
+          color: var(--blue);
+        }
+      }
+    }
+
+    .bottom-menus {
+      margin-bottom: 30px;
+
+      .menu-item {
+        text-align: center;
+        -webkit-app-region: no-drag;
+        cursor: pointer;
+        margin-bottom: 20px;
+        color: #4c5262;
+
+        .iconfont {
+          font-size: 20px;
+        }
+
+        .name {
+          margin-top: 5px;
+          font-size: 12px;
+        }
+
+        &:hover {
+          color: #353535;
+        }
+
+        &:last-child {
+          margin-bottom: 0px;
+        }
+
+        .active {
+          .iconfont {
+            color: var(--blue);
+          }
+
+          .name {
+            color: var(--blue);
+          }
+        }
+      }
+    }
+  }
+
+  .right {
+    flex: 1;
+    width: 0;
+    height: calc(100vh);
+  }
+}
+</style>

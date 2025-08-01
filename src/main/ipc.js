@@ -51,4 +51,14 @@ const onWinTitleOp = () => {
   })
 }
 
-export { onLoginOrRegister, onWinTitleOp }
+const onLoginSuccess = () => {
+  ipcMain.handle('loginSuccess', (e, { userInfo, wsUrl }) => {
+    const mainWindow = getWindow('main')
+    mainWindow.setResizable(true)
+    mainWindow.setMinimumSize(720, 480)
+    mainWindow.setSize(720, 480)
+    mainWindow.setResizable(false)
+  })
+}
+
+export { onLoginOrRegister, onWinTitleOp, onLoginSuccess }

@@ -226,4 +226,14 @@
 .icon-chat:before {
   content: "\e600";
 }
+.icon-contact:before {
+  content: "\e645";
+}
 
+.icon-record:before {
+  content: "\e609";
+}
+
+.icon-shengyinluzhi-copy:before {
+  content: "\e635";
+}

@@ -14,11 +14,13 @@ import { Api } from '@/utils/Api.js'
 import Utils from '@/utils/Utils.js'
 import Verify from '@/utils/Verify.js'
 import Message from '@/utils/Message.js'
+import * as Pinia from 'pinia'
 
 const app = createApp(App)
 
 app.use(ElementPlus)
 app.use(router)
+app.use(Pinia.createPinia())
 
 app.component('Header', Header)
 app.component('TitleBar', TitleBar)

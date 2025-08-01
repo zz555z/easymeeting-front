@@ -1,26 +1,26 @@
 <template>
-  <Header :showMax="false" :closeType="0"></Header>
-  <div class="login-panel" v-if="showLoading">
+  <Header :show-max="false" :close-type="0"></Header>
+  <div v-if="showLoading" class="login-panel">
     <img src="../../assets/img/loading.gif" />
     <div>正在登录...</div>
   </div>
-  <div class="login-form" v-else>
+  <div v-else class="login-form">
     <div class="error-msg">{{ errorMsg }}</div>
-    <el-form :model="formData" :rules="rules" ref="formDataRef" label-width="0px" @submit.prevent>
+    <el-form ref="formDataRef" :model="formData" :rules="rules" label-width="0px" @submit.prevent>
       <!--input输入-->
       <el-form-item prop="email">
-        <el-input clearable placeholder="请输入邮箱" v-model.trim="formData.email" size="large">
+        <el-input v-model.trim="formData.email" clearable placeholder="请输入邮箱" size="large">
           <template #prefix>
             <span class="iconfont icon-email"></span>
           </template>
         </el-input>
       </el-form-item>
 
-      <el-form-item prop="nickName" v-if="!isLogin" size="large">
+      <el-form-item v-if="!isLogin" prop="nickName" size="large">
         <el-input
+          v-model.trim="formData.nickName"
           clearable
           placeholder="请输入昵称"
-          v-model.trim="formData.nickName"
           maxlength="20"
           size="large"
         >
@@ -32,9 +32,9 @@
 
       <el-form-item prop="password">
         <el-input
+          v-model.trim="formData.password"
           clearable
           placeholder="请输入密码"
-          v-model.trim="formData.password"
           show-password
           size="large"
           maxlength="18"
@@ -45,11 +45,11 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item prop="rePassword" v-if="!isLogin">
+      <el-form-item v-if="!isLogin" prop="rePassword">
         <el-input
+          v-model.trim="formData.rePassword"
           clearable
           placeholder="请重新输入密码"
-          v-model.trim="formData.rePassword"
           show-password
           size="large"
           maxlength="18"
@@ -64,9 +64,9 @@
       <el-form-item prop="checkCode">
         <div class="check-code-panel">
           <el-input
+            v-model.trim="formData.checkCode"
             clearable
             placeholder="请输入验证码"
-            v-model.trim="formData.checkCode"
             size="large"
           >
             <template #prefix>
@@ -98,9 +98,14 @@ import { useRoute, useRouter } from 'vue-router'
 import md5 from 'js-md5'
 const route = useRoute()
 const router = useRouter()
+import { useUserInfoStore } from '@/store/UserInfoStore'
+const userInfoStore = useUserInfoStore()
 const isLogin = ref(true)
 const showLoading = ref(false)
-const formData = ref({})
+const formData = ref({
+  email: 'test01@qq.com',
+  password: 'Abc123456'
+})
 const formDataRef = ref()
 const rules = {}
 const salt = 'easymetting'
@@ -172,10 +177,13 @@ const loginOrRegisterSubmit = async () => {
     errorMsg.value = '两次输入的密码不一致'
     return
   }
+  if (isLogin.value) {
+    showLoading.value = true
+  }
 
-  console.log('formData.value', formData.value)
-  console.log('salt', salt)
-  console.log('md5', md5(formData.value.password + salt))
+  // console.log('formData.value', formData.value)
+  // console.log('salt', salt)
+  // console.log('md5', md5(formData.value.password + salt))
 
   let result = await proxy.Request({
     url: isLogin.value ? proxy.Api.login : proxy.Api.register,
@@ -189,6 +197,7 @@ const loginOrRegisterSubmit = async () => {
       nickName: isLogin.value ? '' : formData.value.nickName
     },
     errorCallback: (error) => {
+      showLoading.value = false
       changeCheckCode()
       errorMsg.value = error.message
     }
@@ -199,6 +208,15 @@ const loginOrRegisterSubmit = async () => {
   // console.log('result', result)
 
   if (isLogin.value) {
+    setTimeout(async () => {
+      await window.electron.ipcRenderer.invoke('loginSuccess', {
+        userInfo: result.data,
+        wsUrl: import.meta.env.VITE_WS
+      })
+      userInfoStore.setInfo(result.data)
+      // localStorage.setItem('userInfo', JSON.stringify(result.data))
+      router.push('/home')
+    }, 1500)
   } else {
     console.log('isLogin', isLogin.value)
     proxy.Message.success('注册成功，请登录')
@@ -273,11 +291,32 @@ changeCheckCode()
 
 .check-code-panel {
   display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+
+  .el-input {
+    flex: 1;
+    margin-right: 125px;
+  }
 
   .check-code {
     cursor: pointer;
     width: 120px;
-    margin-left: 5px;
+    height: 40px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-shrink: 0;
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 120px;
+    min-height: 40px;
+    max-width: 120px;
+    max-height: 40px;
   }
 }
 
@@ -289,5 +328,55 @@ changeCheckCode()
 .bottom-link {
   text-align: right;
   font-size: 13px;
+}
+
+.login-panel {
+  /* 固定定位，让内容在视口范围内居中，覆盖整个视口区域 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Flex 布局，使子元素在水平和垂直方向都居中 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* 让背景透明，可不设置 backgroundColor，或者设置 rgba 透明值，这里若想面板背景也透明可这样写：background-color: rgba(255, 255, 255, 0);  */
+}
+
+.login-panel img {
+  /* 调整图片大小为 180px  square  */
+  width: 240px;
+  height: 240px;
+  /* 与下方文字保持间距 */
+  margin-bottom: 20px;
+  /* 若图片本身有背景，可尝试去掉，不过一般 loading.gif 背景透明，这里主要是保证布局等 */
+  background: transparent;
+}
+
+.login-panel div {
+  /* 文字样式，可根据需求调整 */
+  font-size: 16px;
+  color: #333;
+  /* 让文字也水平居中 */
+  text-align: center;
+}
+.login-panel div {
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  /* 文字加载动画，模拟闪烁效果 */
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 </style>

@@ -382,6 +382,27 @@
       "font_class": "chat",
       "unicode": "e600",
       "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "693576",
+      "name": "联系人",
+      "font_class": "contact",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "1458351",
+      "name": "录制",
+      "font_class": "record",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "38561659",
+      "name": "声音录制",
+      "font_class": "shengyinluzhi-copy",
+      "unicode": "e635",
+      "unicode_decimal": 58933
     }
   ]
 }
