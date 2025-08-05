@@ -33,7 +33,7 @@ const router = createRouter({
         {
           path: '/screencap',
           name: '录制',
-          component: () => import('@/views/meeting/MeetingMain.vue'),
+          component: () => import('@/views/screencap/ScreenCap.vue'),
           meta: {
             code: 'screencap'
           }

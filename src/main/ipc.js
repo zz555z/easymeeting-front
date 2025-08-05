@@ -1,6 +1,9 @@
-import { ipcMain } from 'electron'
+import { desktopCapturer, ipcMain, shell } from 'electron'
 import { getWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
+import { initWs } from './wsClient'
+import store from './store'
+import { startRecording, stopRecording } from './recording'
 import { initWs } from './wsClient'
 import store from './store'
 
@@ -28,7 +31,7 @@ const onWinTitleOp = () => {
     const win = BrowserWindow.fromWebContents(webContents)
     switch (action) {
       case 'close':
-        console.log('data.closeType---->', data.closeType)
+        // console.log('data.closeType---->', data.closeType)
         if (data.closeType == 0) {
           win.forceClose = data.forceClose
           win.close()
@@ -63,7 +66,61 @@ const onLoginSuccess = () => {
     store.initUserId(userInfo.userId)
     store.setData('userInfo', userInfo)
     initWs(wsUrl + userInfo.token)
+    store.initUserId(userInfo.userId)
+    store.setData('userInfo', userInfo)
+    initWs(wsUrl + userInfo.token)
   })
 }
 
-export { onLoginOrRegister, onWinTitleOp, onLoginSuccess }
+const onGetScreenSource = () => {
+  ipcMain.handle('getScreenSource', async (event, opts) => {
+    const sources = await desktopCapturer.getSources(opts)
+    // console.log('sources--->', sources)
+    return sources
+      .filter((source) => {
+        const size = source.thumbnail.getSize()
+        return size.width > 10 && size.height > 10
+      })
+      .map((source, index) => ({
+        id: source.id,
+        name: source.name,
+        displayId: source.display_id,
+        // displayId: source.id,
+
+        thumbnail: source.thumbnail.toDataURL()
+      }))
+  })
+}
+
+const onStartRecording = () => {
+  ipcMain.handle('startRecording', (e, { displayId, mic }) => {
+    const sender = e.sender
+    startRecording(sender, displayId, mic)
+  })
+}
+
+const onStopRecording = () => {
+  ipcMain.handle('stopRecording', () => {
+    stopRecording()
+  })
+}
+
+const onOpenLocalFile = () => {
+  ipcMain.on('openLocalFile', (e, { localFilePath, folder = false }) => {
+    if (folder) {
+      shell.openPath(localFilePath)
+    } else {
+      shell.showItemInFolder(localFilePath)
+    }
+  })
+}
+
+export {
+  onLoginOrRegister,
+  onWinTitleOp,
+  onLoginSuccess,
+  onGetScreenSource,
+  onStartRecording,
+  onStopRecording,
+  onOpenLocalFile
+}

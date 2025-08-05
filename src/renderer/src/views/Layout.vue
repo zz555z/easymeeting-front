@@ -72,7 +72,7 @@ const leftTopMenus = ref([
   },
   {
     name: '录制',
-    icon: 'video-play',
+    icon: 'play',
     path: '/screencap',
     codes: ['screencap'],
     messageCount: 0
@@ -105,7 +105,7 @@ const jumpMenu = (menus) => {
 
 const listenerMessage = () => {
   window.electron.ipcRenderer.on('mainMessage', (e, result) => {
-    console.log('mainMessage', result)
+    // console.log('mainMessage', result)
     switch (result.messageType) {
       case 8: //好友申请
         contactStore.updateLastUpdateTime()

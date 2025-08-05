@@ -5,7 +5,15 @@ import meetingIcon from '../../resources/icon-16x16.png?asset'
 import icon from '../../resources/icon.png?asset'
 
 import { saveWindow } from './windowProxy'
-import { onLoginOrRegister, onWinTitleOp, onLoginSuccess } from './ipc'
+import {
+  onLoginOrRegister,
+  onWinTitleOp,
+  onLoginSuccess,
+  onGetScreenSource,
+  onStartRecording,
+  onStopRecording,
+  onOpenLocalFile
+} from './ipc'
 
 function createWindow() {
   // Create the browser window.
@@ -81,7 +89,10 @@ function createWindow() {
 onLoginOrRegister()
 onWinTitleOp()
 onLoginSuccess()
-
+onGetScreenSource()
+onStartRecording()
+onStopRecording()
+onOpenLocalFile()
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

@@ -218,7 +218,7 @@ const loginOrRegisterSubmit = async () => {
       router.push('/home')
     }, 1500)
   } else {
-    console.log('isLogin', isLogin.value)
+    // console.log('isLogin', isLogin.value)
     proxy.Message.success('注册成功，请登录')
     chageOpType()
   }

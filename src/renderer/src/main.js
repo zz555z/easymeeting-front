@@ -11,6 +11,8 @@ import Header from '@/components/Header.vue'
 import TitleBar from '@/components/TitleBar.vue'
 import NoData from '@/components/NoData.vue'
 import Dialog from '@/components/Dialog.vue'
+import Cover from '@/components/Cover.vue'
+
 import Request from '@/utils/Request.js'
 import { Api } from '@/utils/Api.js'
 import Utils from '@/utils/Utils.js'
@@ -29,6 +31,7 @@ app.component('Header', Header)
 app.component('TitleBar', TitleBar)
 app.component('NoData', NoData)
 app.component('Dialog', Dialog)
+app.component('Cover', Cover)
 
 app.config.globalProperties.Request = Request
 app.config.globalProperties.Api = Api
