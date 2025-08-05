@@ -43,13 +43,16 @@
 </template>
 
 <script setup>
-import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
+import { ref, reactive, getCurrentInstance, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 import { useUserInfoStore } from '@/store/UserInfoStore'
 const userInfoStore = useUserInfoStore()
+import { useContactStore } from '@/store/UserContactStore'
+const contactStore = useContactStore()
+import { mitter } from '@/eventbus/eventBus.js'
 
 // 顶部左侧菜单数据，使用 ref 做响应式处理
 const leftTopMenus = ref([
@@ -62,7 +65,7 @@ const leftTopMenus = ref([
   },
   {
     name: '通讯录',
-    icon: 'add-group',
+    icon: 'group',
     path: '/contact',
     codes: ['contact'],
     messageCount: 0
@@ -91,6 +94,69 @@ const leftBottomMenus = [
     onlyAdmin: true
   }
 ]
+
+const jumpMenu = (menus) => {
+  if (menus.btnType === 'admin' && !userInfoStore.userInfo.admin) {
+    proxy.$message.error('只有管理员可以访问此功能')
+    return
+  }
+  router.push(menus.path)
+}
+
+const listenerMessage = () => {
+  window.electron.ipcRenderer.on('mainMessage', (e, result) => {
+    console.log('mainMessage', result)
+    switch (result.messageType) {
+      case 8: //好友申请
+        contactStore.updateLastUpdateTime()
+        break
+      case 12: //好友申请回复
+        let msg = ''
+        if (result.messageContent == 1) {
+          mitter.emit('reloadContact')
+          msg = '已同意申请'
+        } else if (result.status == 2) {
+          msg = '已拒绝申请'
+        } else if (result.status == 3) {
+          msg = '已将你拉黑'
+        }
+        proxy.Alert(`[${result.sendUserNickName}${msg}]`)
+        break
+      default:
+        console.log('未知消息类型', result)
+        break
+    }
+  })
+
+  const loadContactApplyCount = async () => {
+    let result = await proxy.Request({
+      url: proxy.Api.loadContactApplyDealWithCount
+    })
+    if (!result) {
+      return
+    }
+    leftTopMenus.value[1].messageCount = result.data
+  }
+
+  watch(
+    () => contactStore.lastUpdateTime,
+    (newVal, oldVal) => {
+      if (!newVal) {
+        return
+      }
+      loadContactApplyCount()
+    },
+    { immediate: true, deep: true }
+  )
+}
+
+onMounted(() => {
+  listenerMessage()
+})
+
+onUnmounted(() => {
+  window.electron.ipcRenderer.removeAllListeners('mainMessage')
+})
 </script>
 
 <style lang="scss" scoped>
@@ -122,6 +188,8 @@ const leftBottomMenus = [
       .menu-item {
         margin-bottom: 30px; // 增加间距
         text-align: center;
+        cursor: pointer; // 鼠标样式
+        -webkit-app-region: no-drag; // 允许点击
 
         // ...existing code...
         .iconfont {

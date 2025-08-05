@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron'
 import { getWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
+import { initWs } from './wsClient'
+import store from './store'
 
 const onLoginOrRegister = () => {
   ipcMain.handle('loginOrRegister', (event, isLogin) => {
@@ -58,6 +60,9 @@ const onLoginSuccess = () => {
     mainWindow.setMinimumSize(720, 480)
     mainWindow.setSize(720, 480)
     mainWindow.setResizable(false)
+    store.initUserId(userInfo.userId)
+    store.setData('userInfo', userInfo)
+    initWs(wsUrl + userInfo.token)
   })
 }
 

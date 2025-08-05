@@ -23,8 +23,20 @@ const router = createRouter({
           }
         },
         {
-          path: '/meeting/:id',
-          name: '会议详情'
+          path: '/contact',
+          name: '联系人',
+          component: () => import('@/views/contact/Contact.vue'),
+          meta: {
+            code: 'contact'
+          }
+        },
+        {
+          path: '/screencap',
+          name: '录制',
+          component: () => import('@/views/meeting/MeetingMain.vue'),
+          meta: {
+            code: 'screencap'
+          }
         }
       ]
     }

@@ -23,7 +23,7 @@ const props = defineProps({
 
   showMax: {
     type: Boolean,
-    default: true
+    default: false
   },
 
   closeType: {
