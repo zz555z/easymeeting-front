@@ -1,11 +1,9 @@
 import { desktopCapturer, ipcMain, shell } from 'electron'
 import { getWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
-import { initWs } from './wsClient'
 import store from './store'
 import { startRecording, stopRecording } from './recording'
 import { initWs } from './wsClient'
-import store from './store'
 
 const onLoginOrRegister = () => {
   ipcMain.handle('loginOrRegister', (event, isLogin) => {
