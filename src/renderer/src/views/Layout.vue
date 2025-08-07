@@ -58,21 +58,21 @@ import { mitter } from '@/eventbus/eventBus.js'
 const leftTopMenus = ref([
   {
     name: '会议',
-    icon: 'video',
+    icon: 'huiyi',
     path: '/meetingMain',
     codes: ['meeting'],
     messageCount: 0
   },
   {
     name: '通讯录',
-    icon: 'group',
+    icon: '31haoyou',
     path: '/contact',
     codes: ['contact'],
     messageCount: 0
   },
   {
     name: '录制',
-    icon: 'play',
+    icon: 'luzhi',
     path: '/screencap',
     codes: ['screencap'],
     messageCount: 0

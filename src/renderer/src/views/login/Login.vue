@@ -11,7 +11,8 @@
       <el-form-item prop="email">
         <el-input v-model.trim="formData.email" clearable placeholder="请输入邮箱" size="large">
           <template #prefix>
-            <span class="iconfont icon-email"></span>
+            <!-- <span class="iconfont icon-email"></span> -->
+            <span class="iconfont icon-youjian_o"></span>
           </template>
         </el-input>
       </el-form-item>
@@ -25,7 +26,8 @@
           size="large"
         >
           <template #prefix>
-            <span class="iconfont icon-user-nick"></span>
+            <!-- <span class="iconfont icon-user-nick"></span> -->
+            <span class="iconfont icon-yonghu"></span>
           </template>
         </el-input>
       </el-form-item>
@@ -40,7 +42,7 @@
           maxlength="18"
         >
           <template #prefix>
-            <span class="iconfont icon-password"></span>
+            <span class="iconfont icon-mima"></span>
           </template>
         </el-input>
       </el-form-item>
@@ -55,7 +57,7 @@
           maxlength="18"
         >
           <template #prefix>
-            <span class="iconfont icon-password"></span>
+            <span class="iconfont icon-mima"></span>
           </template>
         </el-input>
       </el-form-item>
@@ -70,7 +72,7 @@
             size="large"
           >
             <template #prefix>
-              <span class="iconfont icon-checkcode"></span>
+              <span class="iconfont icon-yanzhengyanzhengma"></span>
             </template>
           </el-input>
           <img :src="checkCodeUrl" class="check-code" @click="changeCheckCode" />

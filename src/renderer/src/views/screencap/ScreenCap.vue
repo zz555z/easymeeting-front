@@ -30,7 +30,7 @@
           录制中：{{ proxy.Utils.convertSecondsToHMS(recordTime, true) }}
         </div>
         <div
-          :class="['iconfont icon-ok icon-stop', recordTime < 3 ? 'stop-disable' : '']"
+          :class="['iconfont icon-ok icon-luzhi_luzhizhong_', recordTime < 3 ? 'stop-disable' : '']"
           @click="stopRecord"
           v-if="recordStatus === 2"
         >
@@ -177,7 +177,7 @@ onMounted(() => {
       margin-bottom: 20px;
     }
 
-    .icon-stop {
+    .icon-luzhi_luzhizhong_ {
       display: flex;
       align-items: center;
       font-size: 13px;

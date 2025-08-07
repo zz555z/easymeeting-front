@@ -3,22 +3,22 @@
     <div class="left-panel">
       <div class="quick-btns">
         <div :class="['btn', meetingStore.inMeeting ? 'btn-disable' : '']" @click="addMeeting(0)">
-          <div class="iconfont icon-add"></div>
+          <div class="iconfont icon-jiaruhuiyi"></div>
           <div class="name">加入会议</div>
         </div>
         <div :class="['btn', meetingStore.inMeeting ? 'btn-disable' : '']" @click="quickMeeting">
-          <div class="iconfont icon-plane"></div>
+          <div class="iconfont icon-kuaisuhuiyi1"></div>
           <!-- <div class="iconfont icon-gongxiangpingmu1"></div> -->
 
           <div class="name">快速会议</div>
           <div class="btn-disable" v-if="meetingStore.inMeeting"></div>
         </div>
         <div class="btn" @click="reserveMeeting">
-          <div class="iconfont icon-ok"></div>
+          <div class="iconfont icon-yuyuehuiyi"></div>
           <div class="name">预定会议</div>
         </div>
         <div :class="['btn', meetingStore.inMeeting ? 'btn-disable' : '']" @click="addMeeting(1)">
-          <div class="iconfont icon-resize"></div>
+          <div class="iconfont icon-pingmugongxiang"></div>
           <div class="name">共享屏幕</div>
         </div>
       </div>

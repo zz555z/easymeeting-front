@@ -10,7 +10,7 @@
     <div
       :style="{ 'border-radius': `${borderRadius}px` }"
       v-if="showMin"
-      class="iconfont icon-min"
+      class="iconfont icon-minus-bold"
       @click="minimize()"
       title="最小化"
     ></div>
@@ -18,7 +18,7 @@
     <div
       :style="{ 'border-radius': `${borderRadius}px` }"
       v-if="showMax"
-      :class="['iconfont', isMax ? 'icon-maximize' : 'icon-max']"
+      :class="['iconfont', isMax ? 'icon-arrow-down-bold' : 'icon-rrow-up-bold']"
       :title="isMax ? '还原' : '最大化'"
       @click="maximize()"
     ></div>

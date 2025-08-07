@@ -1,8 +1,11 @@
 <template>
   <div class="mic-panel">
     <div class="mic-show" :style="{ width: size + 'px', height: size + 'px' }">
-      <div class="iconfont icon-close" v-if="!micDeviceInfo.open || !micDeviceInfo.enable"></div>
-      <div class="iconfont icon-robot" v-else></div>
+      <div
+        class="iconfont icon-24gl-micDisable"
+        v-if="!micDeviceInfo.open || !micDeviceInfo.enable"
+      ></div>
+      <div class="iconfont icon-shengyinluzhi-copy" v-else></div>
       <div class="volume" :style="{ height: volume * 1.5 + 'px' }"></div>
     </div>
     <div v-if="showLabel" :class="['mic-label', micDeviceInfo.open ? 'active' : '']">
@@ -163,11 +166,11 @@ defineExpose({ toggleMic })
     overflow: hidden;
     cursor: pointer;
 
-    .icon-robot {
+    .icon-shengyinluzhi-copy {
       color: var(--blue);
     }
 
-    .icon-close {
+    .icon-24gl-micDisable {
       color: #5b5b5b;
     }
 

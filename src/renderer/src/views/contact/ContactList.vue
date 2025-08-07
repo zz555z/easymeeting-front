@@ -7,7 +7,7 @@
       :prefix-icon="Search"
       @keyup="search"
     ></el-input>
-    <div class="iconfont icon-invite icon-add-group" @click="applyContact"></div>
+    <div class="iconfont icon-invite icon-tianjiayonghu" @click="applyContact"></div>
   </div>
   <div class="contact-list">
     <div class="contact-item" v-for="item in contactList" :key="item.contactId">
