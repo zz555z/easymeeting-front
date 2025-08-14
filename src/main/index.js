@@ -12,7 +12,10 @@ import {
   onGetScreenSource,
   onStartRecording,
   onStopRecording,
-  onOpenLocalFile
+  onOpenLocalFile,
+  onSaveSysSetting,
+  onGetSysSetting,
+  onChangeLocalFolder
 } from './ipc'
 
 function createWindow() {
@@ -93,6 +96,9 @@ onGetScreenSource()
 onStartRecording()
 onStopRecording()
 onOpenLocalFile()
+onSaveSysSetting()
+onGetSysSetting()
+onChangeLocalFolder()
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

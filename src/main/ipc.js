@@ -1,9 +1,10 @@
-import { desktopCapturer, ipcMain, shell } from 'electron'
+import { desktopCapturer, ipcMain, shell, dialog } from 'electron'
 import { getWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
 import store from './store'
 import { startRecording, stopRecording } from './recording'
 import { initWs } from './wsClient'
+import { getSysSetting, saveSysSetting } from './sysSetting'
 
 const onLoginOrRegister = () => {
   ipcMain.handle('loginOrRegister', (event, isLogin) => {
@@ -64,9 +65,9 @@ const onLoginSuccess = () => {
     store.initUserId(userInfo.userId)
     store.setData('userInfo', userInfo)
     initWs(wsUrl + userInfo.token)
-    store.initUserId(userInfo.userId)
-    store.setData('userInfo', userInfo)
-    initWs(wsUrl + userInfo.token)
+    // store.initUserId(userInfo.userId)
+    // store.setData('userInfo', userInfo)
+    // initWs(wsUrl + userInfo.token)
   })
 }
 
@@ -113,6 +114,33 @@ const onOpenLocalFile = () => {
   })
 }
 
+const onSaveSysSetting = () => {
+  ipcMain.handle('saveSysSetting', (e, sysSetting) => {
+    saveSysSetting(sysSetting)
+  })
+}
+
+const onGetSysSetting = () => {
+  ipcMain.handle('getSysSetting', (e, sysSetting) => {
+    return getSysSetting()
+  })
+}
+
+const onChangeLocalFolder = () => {
+  ipcMain.handle('changeLocalFolder', async (e, { localFilePath }) => {
+    const option = {
+      properties: ['openDirectory'],
+      defaultPath: localFilePath
+    }
+    let result = await dialog.showOpenDialog(option)
+
+    if (result.canceled) {
+      return
+    }
+    return result.filePaths[0].replaceAll('//', '\\\\')
+  })
+}
+
 export {
   onLoginOrRegister,
   onWinTitleOp,
@@ -120,5 +148,8 @@ export {
   onGetScreenSource,
   onStartRecording,
   onStopRecording,
-  onOpenLocalFile
+  onOpenLocalFile,
+  onSaveSysSetting,
+  onGetSysSetting,
+  onChangeLocalFolder
 }

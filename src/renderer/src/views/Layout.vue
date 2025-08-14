@@ -82,7 +82,7 @@ const leftTopMenus = ref([
 // 底部左侧菜单数据，普通数组
 const leftBottomMenus = [
   {
-    icon: 'setting1',
+    icon: 'shezhi',
     path: '/setting',
     codes: ['setting'],
     onlyAdmin: false
