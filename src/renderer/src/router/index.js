@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('@/views/login/Login.vue')
     },
     {
+      path: '/meeting',
+      name: '会议',
+      component: () => import('@/views/meeting/meeting/Meeting.vue')
+    },
+    {
       path: '/home',
       name: '主界面',
       component: () => import('@/views/Layout.vue'),

@@ -1,11 +1,18 @@
 import { desktopCapturer, ipcMain, shell, dialog } from 'electron'
-import { getWindow } from './windowProxy'
+import { getWindow, saveWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
-import store from './store'
+
 import { startRecording, stopRecording } from './recording'
 import { initWs, logout } from './wsClient'
 import { getSysSetting, saveSysSetting } from './sysSetting'
-
+import { join } from 'path'
+import icon from '../../resources/icon.png?asset'
+import { is } from '@electron-toolkit/utils'
+import store from './store'
+const fs = require('fs')
+const path = require('path')
+const FormData = require('form-data')
+const axios = require('axios')
 const onLoginOrRegister = () => {
   ipcMain.handle('loginOrRegister', (event, isLogin) => {
     const login_with = 375
@@ -147,6 +154,115 @@ const onLogout = () => {
   })
 }
 
+const openWindow = ({
+  windowId,
+  title = '详情',
+  path,
+  width = 960,
+  height = 720,
+  data,
+  maximizable = false
+}) => {
+  let newWindow = getWindow(windowId)
+  const paramsArray = []
+  if (data && Object.keys(data).length > 0) {
+    path = path.endsWith('?') ? path : path + '?'
+    for (let i in data) {
+      paramsArray.push(`${i}=${encodeURIComponent(data[i])}`)
+    }
+    path = path + paramsArray.join('&')
+  }
+  if (!newWindow) {
+    newWindow = new BrowserWindow({
+      width,
+      height,
+      minHeight: height,
+      minWidth: width,
+      show: false,
+      autoHideMenuBar: true,
+      frame: false,
+      fullscreenable: false,
+      resizable: maximizable,
+      maximizable,
+      ...(process.platform === 'linux' ? { icon } : {}),
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        sandbox: false
+      }
+    })
+    saveWindow(windowId, newWindow)
+    // if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    //   newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    // } else {
+    //   newWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    // }
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      newWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/index.html#${path}`)
+    } else {
+      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: `${path}` })
+    }
+
+    newWindow.on('ready-to-show', () => {
+      newWindow.show()
+    })
+
+    newWindow.on('close', (event) => {
+      //todo 关闭会议窗口
+      if (newWindow.forceClose !== undefined && !newWindow.forceClose) {
+        preCloseWindow(windowId)
+        event.preventDefault()
+      }
+    })
+
+    newWindow.on('closed', () => {
+      colsewindow(windowId)
+      delWindow(windowId)
+    })
+
+    newWindow.on('maximize', (event) => {
+      newWindow.webContents.send('winIsMax', true)
+    })
+    newWindow.on('unmaximize', (event) => {
+      newWindow.webContents.send('winIsMax', false)
+    })
+  } else {
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      newWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/index.html#${path}`)
+    } else {
+      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: `${path}` })
+    }
+    newWindow.show()
+    newWindow.setSkipTaskbar(false)
+  }
+}
+
+const colsewindow = (windowId) => {
+  const mainWindow = getWindow('main')
+  if (mainWindow) {
+    mainWindow.webContents.send('closeWindow', { windowId })
+  }
+}
+const preCloseWindow = (windowId) => {
+  const win = getWindow(windowId)
+  if (win) {
+    win.webContents.send('preCloseWindow')
+  }
+}
+
+const onOpenWindow = () => {
+  ipcMain.on('openWindow', (e, { title, windowId, path, width, height, data, maximizable }) => {
+    openWindow({
+      title,
+      windowId,
+      path,
+      width,
+      height,
+      data,
+      maximizable
+    })
+  })
+}
+
 export {
   onLogout,
   onLoginOrRegister,
@@ -158,5 +274,6 @@ export {
   onOpenLocalFile,
   onSaveSysSetting,
   onGetSysSetting,
-  onChangeLocalFolder
+  onChangeLocalFolder,
+  onOpenWindow
 }
