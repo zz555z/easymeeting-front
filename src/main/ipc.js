@@ -3,7 +3,7 @@ import { getWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
 import store from './store'
 import { startRecording, stopRecording } from './recording'
-import { initWs } from './wsClient'
+import { initWs, logout } from './wsClient'
 import { getSysSetting, saveSysSetting } from './sysSetting'
 
 const onLoginOrRegister = () => {
@@ -141,7 +141,14 @@ const onChangeLocalFolder = () => {
   })
 }
 
+const onLogout = () => {
+  ipcMain.handle('logout', (e) => {
+    logout()
+  })
+}
+
 export {
+  onLogout,
   onLoginOrRegister,
   onWinTitleOp,
   onLoginSuccess,

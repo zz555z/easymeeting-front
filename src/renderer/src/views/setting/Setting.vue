@@ -46,9 +46,13 @@
       </div>
     </div>
   </div>
+  <UpdatePassword ref="updatePasswordRef"></UpdatePassword>
+  <AppUpdate :autoUpdate="false" ref="appUpdateRef"></AppUpdate>
 </template>
 
 <script setup>
+import AppUpdate from './AppUpdate.vue'
+import UpdatePassword from './UpdatePassword.vue'
 import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const { proxy } = getCurrentInstance()
@@ -89,6 +93,32 @@ const openLocalFolder = () => {
   })
 }
 // onChangeLocalFolder
+
+const updatePasswordRef = ref()
+const updatePassword = () => {
+  updatePasswordRef.value.show()
+}
+
+const logout = () => {
+  proxy.Confirm({
+    message: '确定要退出吗?',
+    okfun: async () => {
+      let result = await proxy.Request({
+        url: proxy.Api.logout
+      })
+      if (!result) {
+        return
+      }
+      await window.electron.ipcRenderer.invoke('logout')
+      router.push('/')
+    }
+  })
+}
+
+const appUpdateRef = ref()
+const checkUpdate = () => {
+  appUpdateRef.value.checkUpdate()
+}
 
 getSysSetting()
 </script>

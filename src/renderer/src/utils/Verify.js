@@ -6,7 +6,6 @@ const regs = {
 }
 
 const verify = (rule, value, reg, callback) => {
-  debugger
   if (value) {
     if (reg.test(value)) {
       callback()

@@ -4,7 +4,7 @@ const Api = {
   login: '/login/login', // 登录
   register: '/login/register', // 注册
   logout: '/login/logout', // 退出,
-  updatePassword: '/account/updatePassword', // 修改密码
+  updatePassword: '/userContact/updatePassword', // 修改密码
   getSysSetting: '/account/getSysSetting', // 获取系统设置
   getResource: '/api/file/getResource', // 资源
   getAvatar: '/api/file/getAvatar', // 获取头像
