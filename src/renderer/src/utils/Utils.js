@@ -155,11 +155,11 @@ const formatMeetingNo = (meetingNo) => {
 
 const getSexIcon = (sex) => {
   if (sex == 0) {
-    return 'icon-woman'
+    return 'icon-nvren'
   } else if (sex == 1) {
-    return 'icon-man'
+    return 'icon-nanren'
   } else {
-    return 'icon-user-nick'
+    return 'icon-ziyuanxhdpi'
   }
 }
 

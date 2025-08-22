@@ -55,6 +55,13 @@
       "unicode_decimal": 58947
     },
     {
+      "icon_id": "1345932",
+      "name": "项目成员",
+      "font_class": "chengyuan",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
       "icon_id": "1382707",
       "name": "会议",
       "font_class": "huiyi",
@@ -90,25 +97,11 @@
       "unicode_decimal": 58966
     },
     {
-      "icon_id": "4275560",
-      "name": "录制",
-      "font_class": "luzhi1",
-      "unicode": "e606",
-      "unicode_decimal": 58886
-    },
-    {
       "icon_id": "4485682",
       "name": "最大化",
       "font_class": "zuidahua",
       "unicode": "e534",
       "unicode_decimal": 58676
-    },
-    {
-      "icon_id": "5387994",
-      "name": "添加好友_o",
-      "font_class": "tianjiahaoyou_o",
-      "unicode": "ebad",
-      "unicode_decimal": 60333
     },
     {
       "icon_id": "5388066",
@@ -146,25 +139,18 @@
       "unicode_decimal": 58952
     },
     {
-      "icon_id": "7986509",
-      "name": "录制 _录制中_24",
-      "font_class": "luzhi_luzhizhong_",
-      "unicode": "e737",
-      "unicode_decimal": 59191
-    },
-    {
-      "icon_id": "7986510",
-      "name": "录制_关闭录制_24",
-      "font_class": "luzhi_guanbiluzhi_",
-      "unicode": "e738",
-      "unicode_decimal": 59192
-    },
-    {
       "icon_id": "8288855",
       "name": "密码",
       "font_class": "mima",
       "unicode": "e850",
       "unicode_decimal": 59472
+    },
+    {
+      "icon_id": "11435770",
+      "name": "聊天",
+      "font_class": "liaotian",
+      "unicode": "e619",
+      "unicode_decimal": 58905
     },
     {
       "icon_id": "15838432",
@@ -193,20 +179,6 @@
       "font_class": "arrow-double-right",
       "unicode": "e668",
       "unicode_decimal": 58984
-    },
-    {
-      "icon_id": "15838444",
-      "name": "close",
-      "font_class": "close",
-      "unicode": "e669",
-      "unicode_decimal": 58985
-    },
-    {
-      "icon_id": "15838473",
-      "name": "error",
-      "font_class": "error",
-      "unicode": "e66f",
-      "unicode_decimal": 58991
     },
     {
       "icon_id": "15838561",
@@ -268,8 +240,8 @@
       "icon_id": "20205479",
       "name": "关闭录制",
       "font_class": "guanbiluzhi",
-      "unicode": "e619",
-      "unicode_decimal": 58905
+      "unicode": "e61a",
+      "unicode_decimal": 58906
     },
     {
       "icon_id": "25302551",
@@ -298,6 +270,27 @@
       "font_class": "shengyinluzhi-copy",
       "unicode": "e635",
       "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "43823615",
+      "name": "layout-top",
+      "font_class": "layout-top",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "43823619",
+      "name": "layout-right",
+      "font_class": "layout-right",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "43823621",
+      "name": "layout-grid-2_2",
+      "font_class": "layout-grid-2_2",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
     }
   ]
 }

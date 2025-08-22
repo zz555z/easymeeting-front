@@ -40,9 +40,26 @@ const connectWs = () => {
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data)
     console.log('收到消息:', data)
+    // console.log('getWindowManage:', getWindowManage())
     const meetingWindow = getWindow('meeting')
     const mainWindow = getWindow('main')
     switch (data.messageType) {
+      case 1: //加入房间
+      case 2: //发送peer
+      case 3: //退出房间
+        if (mainWindow && (data.messageType == 1 || data.messageType == 3)) {
+          mainWindow.webContents.send('meetingMessage', data)
+        }
+        if (meetingWindow) {
+          meetingWindow.webContents.send('meetingMessage', data)
+        }
+        break
+      case 11: //用户开启或关闭摄像头
+        if (!meetingWindow) {
+          return
+        }
+        meetingWindow.webContents.send('meetingMessage', data)
+        break
       case 8: //好友申请
       case 12: //好友申请回复
         if (!mainWindow) {

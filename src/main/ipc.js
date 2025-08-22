@@ -1,9 +1,9 @@
 import { desktopCapturer, ipcMain, shell, dialog } from 'electron'
-import { getWindow, saveWindow } from './windowProxy'
+import { getWindow, saveWindow, delWindow } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
 
 import { startRecording, stopRecording } from './recording'
-import { initWs, logout } from './wsClient'
+import { initWs, logout, sendWsData } from './wsClient'
 import { getSysSetting, saveSysSetting } from './sysSetting'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
@@ -35,13 +35,15 @@ const onWinTitleOp = () => {
     console.log('当前动作：' + action)
     const webContents = e.sender
     const win = BrowserWindow.fromWebContents(webContents)
+
     switch (action) {
       case 'close':
-        // console.log('data.closeType---->', data.closeType)
         if (data.closeType == 0) {
+          console.log('强制关闭')
           win.forceClose = data.forceClose
           win.close()
         } else {
+          console.log('正常关闭')
           win.setSkipTaskbar(true)
           win.hide()
         }
@@ -207,11 +209,13 @@ const openWindow = ({
     })
 
     newWindow.on('close', (event) => {
-      //todo 关闭会议窗口
+      //todo 关闭会议窗口 暂时先不阻止
       if (newWindow.forceClose !== undefined && !newWindow.forceClose) {
         preCloseWindow(windowId)
         event.preventDefault()
       }
+      // console.log('close')
+      // delWindow(windowId)
     })
 
     newWindow.on('closed', () => {
@@ -263,6 +267,12 @@ const onOpenWindow = () => {
   })
 }
 
+const onSendPeerConnection = () => {
+  ipcMain.on('sendPeerConnection', (e, peerData) => {
+    peerData.token = store.getData('userInfo')?.token
+    sendWsData(JSON.stringify(peerData))
+  })
+}
 export {
   onLogout,
   onLoginOrRegister,
@@ -275,5 +285,6 @@ export {
   onSaveSysSetting,
   onGetSysSetting,
   onChangeLocalFolder,
-  onOpenWindow
+  onOpenWindow,
+  onSendPeerConnection
 }

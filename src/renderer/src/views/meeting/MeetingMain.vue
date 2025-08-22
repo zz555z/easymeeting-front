@@ -29,9 +29,11 @@
     <TitleBar></TitleBar>
   </div>
   <QuickMeeting ref="quickMeetingRef" @joinMeeting="joinMeetingHandler"></QuickMeeting>
+  <AddMeeting ref="addMeetingRef" @joinMeeting="joinMeetingHandler"></AddMeeting>
 </template>
 
 <script setup>
+import AddMeeting from './AddMeeting.vue'
 import QuickMeeting from './QuickMeeting.vue'
 import Today from './Today.vue'
 import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
@@ -60,6 +62,11 @@ const joinMeetingHandler = (addType = 0, screenId = '') => {
     height: 800,
     maximizable: true
   })
+}
+
+const addMeetingRef = ref()
+const addMeeting = (addType) => {
+  addMeetingRef.value.show({ addType })
 }
 </script>
 
