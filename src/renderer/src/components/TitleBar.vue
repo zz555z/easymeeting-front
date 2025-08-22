@@ -18,14 +18,14 @@
     <div
       :style="{ 'border-radius': `${borderRadius}px` }"
       v-if="showMax"
-      :class="['iconfont', isMax ? 'icon-arrow-down-bold' : 'icon-rrow-up-bold']"
+      :class="['iconfont', isMax ? 'icon-zuixiaohua' : 'icon-zuidahua']"
       :title="isMax ? '还原' : '最大化'"
       @click="maximize()"
     ></div>
     <div
       :style="{ 'border-radius': `${borderRadius}px` }"
       v-if="showClose"
-      class="iconfont icon-close"
+      class="iconfont icon-close-bold"
       title="关闭"
       @click="close()"
     ></div>
@@ -54,7 +54,7 @@ const props = defineProps({
   },
   closeType: {
     type: Number,
-    default: 1 // 0: 关闭应用, 1: 隐藏窗口
+    default: 0 // 0: 关闭应用, 1: 隐藏窗口
   },
   styleTop: {
     type: Number,
@@ -125,7 +125,7 @@ defineExpose({
       background: #ddd;
     }
   }
-  .icon-close {
+  .icon-close-bold {
     &:hover {
       background: #fa4e32;
       color: #fff;

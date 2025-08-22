@@ -35,9 +35,9 @@ const onWinTitleOp = () => {
     console.log('当前动作：' + action)
     const webContents = e.sender
     const win = BrowserWindow.fromWebContents(webContents)
+
     switch (action) {
       case 'close':
-        // console.log('data.closeType---->', data.closeType)
         if (data.closeType == 0) {
           win.forceClose = data.forceClose
           win.close()
@@ -207,11 +207,11 @@ const openWindow = ({
     })
 
     newWindow.on('close', (event) => {
-      //todo 关闭会议窗口
-      if (newWindow.forceClose !== undefined && !newWindow.forceClose) {
-        preCloseWindow(windowId)
-        event.preventDefault()
-      }
+      //todo 关闭会议窗口 暂时先不阻止
+      // if (newWindow.forceClose !== undefined && !newWindow.forceClose) {
+      //   preCloseWindow(windowId)
+      //   event.preventDefault()
+      // }
     })
 
     newWindow.on('closed', () => {
