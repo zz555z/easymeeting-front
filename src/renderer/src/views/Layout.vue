@@ -239,6 +239,12 @@ onUnmounted(() => {
   display: flex;
   position: relative;
   z-index: 1;
+  // :deep(.el-overlay),
+  // :deep(.el-message-box__wrapper),
+  // :deep(.el-message-box) {
+  //   -webkit-app-region: no-drag !important;
+  //   z-index: 99999 !important;
+  // }
 
   .left {
     width: 64px;
@@ -340,11 +346,11 @@ onUnmounted(() => {
 }
 </style>
 
-<style lang="scss">
+<!-- <style lang="scss">
 .el-overlay,
 .el-message-box__wrapper,
 .el-message-box {
   -webkit-app-region: no-drag !important;
   z-index: 99999 !important;
 }
-</style>
+</style> -->

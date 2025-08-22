@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="user-info" v-show="!item.videoOpen">
-        <Avatar :avatar="item.userid" :update="true"></Avatar>
+        <Avatar :avatar="item.userId" :update="true"></Avatar>
 
         <div :class="['user-name', 'iconfont', proxy.Utils.getSexIcon(item.sex)]">
           {{ item.nickName }}

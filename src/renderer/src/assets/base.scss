@@ -72,8 +72,9 @@
   }
 }
 
-.el-message-box {
-  -webkit-app-regoin: no-drag;
+.el-message-box,
+.el-message-box * {
+  -webkit-app-region: no-drag !important;
 }
 
 .top-panel {
