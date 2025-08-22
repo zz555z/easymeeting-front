@@ -437,10 +437,10 @@ const initMeetingListener = () => {
   window.electron.ipcRenderer.on(
     'meetingMessage',
     (e, { sendUserId, receiveUserId, messageContent, messageType }) => {
-      // console.log('meetingMessage', { sendUserId, receiveUserId, messageContent, messageType })
+      console.log('meetingMessage', { sendUserId, receiveUserId, messageContent, messageType })
       switch (messageType) {
         case 1: // 用户加入
-          // console.log('用户加入', messageContent)
+          console.log('用户加入', messageContent)
           // TODO 用户加入
           onUserJoin(messageContent)
           break

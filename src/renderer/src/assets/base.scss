@@ -1,46 +1,45 @@
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgb(239, 239, 239);
-    border-radius: 2px;
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #bfbfbf;
-    border-radius: 10px;
+  background: #bfbfbf;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #bfbfbf;
+  background: #bfbfbf;
 }
 
 ::-webkit-scrollbar-corner {
-    background: #bfbfbf;
+  background: #bfbfbf;
 }
 
 * {
-    box-sizing: border-box;
-    padding: 0px;
-    margin: 0px;
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
 }
 
 :root {
-    --text: #494949;
-    --text2: #5c5c5c;
-    --blue: #0471ff;
-    --green: #97d47a;
-    --bodyPadding: 10px;
+  --text: #494949;
+  --text2: #5c5c5c;
+  --blue: #0471ff;
+  --green: #97d47a;
+  --bodyPadding: 10px;
 }
 
 .a-link {
-    cursor: pointer;
-    text-decoration: none;
-    color: #0471ff;
+  cursor: pointer;
+  text-decoration: none;
+  color: #0471ff;
 }
-
 
 // body {
 //     margin: 0px;
@@ -50,45 +49,47 @@
 // }
 
 .my-tab {
-    .el-tabs__nav-wrap {
-        &::after {
-            background: none;
-        }
+  .el-tabs__nav-wrap {
+    &::after {
+      background: none;
     }
+  }
 
-    .el-tabs__header {
-        margin: 0px;
-    }
+  .el-tabs__header {
+    margin: 0px;
+  }
 }
 
 .my-collapse {
-    .el-collapse-item__content {
-        padding-bottom: 0px;
-    }
+  .el-collapse-item__content {
+    padding-bottom: 0px;
+  }
 
-    .el-collapse-item__wrap,
-    .el-collapse,
-    .el-collapse-item__header {
-        border-bottom: none;
-    }
+  .el-collapse-item__wrap,
+  .el-collapse,
+  .el-collapse-item__header {
+    border-bottom: none;
+  }
 }
 
-.el-message-box { 
-    -webkit-app-regoin: no-drag 
+.el-message-box {
+  -webkit-app-regoin: no-drag;
 }
-
 
 .top-panel {
-    .el-form-item {
-        margin-bottom: 0px;
-    }
+  -webkit-app-region: drag;
+  .avatar,
+  .menu-item {
+    -webkit-app-region: no-drag; /* 避免按钮被拖拽覆盖 */
+  }
+  .el-form-item {
+    margin-bottom: 0px;
+  }
 
-    .second-row {
-        margin-top: 5px;
-    }
+  .second-row {
+    margin-top: 5px;
+  }
 }
-
-
 
 // .row-op-panel {
 //     a {

@@ -41,8 +41,22 @@
             </div>
           </div>
         </div>
+        <SplitLine
+          v-show="memberOpened || chatOpened"
+          @widthChange="widthChange"
+          :initWidth="initRightWidth"
+        ></SplitLine>
+
+        <div v-show="memberOpened || chatOpened" :style="{ width: rightWidth + 'px' }">
+          {{ memberOpened ? '成员列表' : '' }}
+          {{ chatOpened ? '聊天列表' : '' }}
+        </div>
       </div>
-      <Footer :deviceInfo="deviceInfo"></Footer>
+      <Footer
+        :deviceInfo="deviceInfo"
+        @openMember="openMemberHandler"
+        @openChat="openChatHandler"
+      ></Footer>
     </template>
     <template v-else>
       <div class="check-env">正在检查系统环境……</div>
@@ -51,6 +65,7 @@
 </template>
 
 <script setup>
+import SplitLine from './SplitLine.vue'
 import MemberList from './MemberList.vue'
 import Footer from './Footer.vue'
 import { mitter } from '@/eventbus/eventBus.js'
@@ -130,7 +145,7 @@ const closeMeeting = () => {
     message: '确定要退出会议吗？',
     okfun: () => {
       titleBarRef.value.custClose()
-      // window.electron.ipcRenderer.send('closeWindow', 'meeting')
+      window.electron.ipcRenderer.send('closeWindow', 'meeting')
     }
   })
 }
@@ -156,6 +171,26 @@ onUnmounted(() => {
   mitter.off('layoutChange', layoutChangeHandler)
   window.electron.ipcRenderer.removeAllListeners('preCloseWindow')
 })
+
+// 右侧容器
+const initRightWidth = 400
+const rightWidth = ref(initRightWidth)
+
+const widthChange = (width) => {
+  rightWidth.value = width
+}
+
+const memberOpened = ref(false)
+const openMemberHandler = () => {
+  chatOpened.value = false
+  memberOpened.value = !memberOpened.value
+}
+
+const chatOpened = ref(false)
+const openChatHandler = () => {
+  memberOpened.value = false
+  chatOpened.value = !chatOpened.value
+}
 </script>
 
 <style lang="scss" scoped>

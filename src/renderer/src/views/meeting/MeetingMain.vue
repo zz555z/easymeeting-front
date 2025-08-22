@@ -6,7 +6,7 @@
           <div class="iconfont icon-jiaruhuiyi"></div>
           <div class="name">加入会议</div>
         </div>
-        <div :class="['btn', meetingStore.inMeeting ? 'btn-disable' : '']" @click="quickMeeting">
+        <div :class="['btn', meetingStore.inMeeting ? 'btn-disable' : '']" @click="quickMeeting()">
           <div class="iconfont icon-kuaisuhuiyi1"></div>
           <!-- <div class="iconfont icon-gongxiangpingmu1"></div> -->
 

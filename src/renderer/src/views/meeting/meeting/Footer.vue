@@ -111,6 +111,7 @@ const shareScreenClickHandler = () => {
   selectScreenRef.value.show()
 }
 
+const emit = defineEmits(['openMember', 'openChat'])
 const inviteMemberRef = ref()
 const clickHandler = (item) => {
   console.log(item)
@@ -128,10 +129,10 @@ const clickHandler = (item) => {
       inviteMemberRef.value.show()
       break
     case 'members':
-      // shareScreenHandler()
+      emit('openMember')
       break
     case 'chat':
-      // inviteMemberRef.value.show()
+      emit('openChat')
       break
   }
 }
