@@ -8,6 +8,7 @@ const responseTypeJson = 'json'
 let loading = null
 const instance = axios.create({
   withCredentials: true,
+  // dev域名为null会走代理转发
   baseURL: (import.meta.env.PROD ? import.meta.env.VITE_DOMAIN : '') + '/api',
   timeout: 10 * 1000
 })
@@ -69,29 +70,49 @@ instance.interceptors.response.use(
 const request = (config) => {
   const {
     url,
-    params,
+    params = {}, // 默认空对象，避免为null
     dataType,
     showLoading = true,
     responseType = responseTypeJson,
     showError = true
   } = config
-  let contentType = contentTypeForm
-  let formData = new FormData() // 创建form对象
-  for (let key in params) {
-    formData.append(key, params[key] == undefined ? '' : params[key])
-  }
-  if (dataType != null && dataType == 'json') {
-    contentType = contentTypeJson
-  }
-  let userInfoJson = localStorage.getItem('userInfo')
-  const token = userInfoJson ? JSON.parse(userInfoJson).token : ''
+  console.log('request', config)
+
   let headers = {
-    'Content-Type': contentType,
     'X-Requested-With': 'XMLHttpRequest',
-    token: token
+    token: (() => {
+      let userInfoJson = localStorage.getItem('userInfo')
+      return userInfoJson ? JSON.parse(userInfoJson).token : ''
+    })()
   }
+
+  let postData = params
+  // 判断是否有文件类型
+  const hasFile =
+    params &&
+    typeof params === 'object' &&
+    Object.values(params).some((v) => v instanceof File || v instanceof Blob)
+  if (hasFile) {
+    let formData = new FormData()
+    for (let key in params) {
+      formData.append(key, params[key] == undefined ? '' : params[key])
+    }
+    postData = formData
+    // 不要手动设置 Content-Type，axios 会自动处理
+  } else if (dataType === 'json') {
+    headers['Content-Type'] = contentTypeJson
+    postData = params
+  } else {
+    headers['Content-Type'] = contentTypeForm
+    let formData = new FormData()
+    for (let key in params) {
+      formData.append(key, params[key] == undefined ? '' : params[key])
+    }
+    postData = formData
+  }
+
   return instance
-    .post(url, formData, {
+    .post(url, postData, {
       onUploadProgress: (event) => {
         if (config.uploadProgressCallback) {
           config.uploadProgressCallback(event)

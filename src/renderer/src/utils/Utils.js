@@ -144,7 +144,7 @@ const getResroucePath = ({ messageId, thumbnail = false, fileType, sendTime }) =
 }
 
 const getAvatarPath = (userId, forceUpdate = false) => {
-  return `${import.meta.env.PROD ? import.meta.env.VITE_DOMAIN : ''}${Api.getAvatar}?userId=${userId}&token=${getToken}`
+  return `${import.meta.env.PROD ? import.meta.env.VITE_DOMAIN : ''}${Api.getAvatar}?userId=${userId}&token=${getToken()}&t=${forceUpdate ? Date.now() : ''}`
 }
 
 const formatMeetingNo = (meetingNo) => {

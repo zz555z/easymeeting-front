@@ -8,7 +8,7 @@ const Api = {
   getSysSetting: '/account/getSysSetting', // 获取系统设置
   getResource: '/api/file/getResource', // 资源
   getAvatar: '/api/file/getAvatar', // 获取头像
-  updateUserInfo: '/account/updateUserInfo', // 更新用户信息
+  updateUserInfo: '/userContact/updateUserInfo', // 更新用户信息
   uploadChatFile: '/api/chat/uploadFile', // 上传聊天资源
   downloadFile: '/api/file/downloadFile', // 下载文件
   quickMeeting: '/meeting/quickMeeting', // 快速会议

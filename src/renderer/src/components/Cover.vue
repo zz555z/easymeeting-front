@@ -70,8 +70,8 @@ const fileSource = computed(() => {
     return null
   }
   if (props.source instanceof File) {
-    let img = FileReader()
-    img.readASDataURL(props.source)
+    let img = new FileReader()
+    img.readAsDataURL(props.source)
     img.onload = ({ target }) => {
       fileImage.value = target.result
     }

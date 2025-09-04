@@ -21,6 +21,7 @@ export default defineConfig({
       hmr: true,
       port: 6001,
       proxy: {
+        //  /api 开头的请求会转发，不然会有跨域问题 dev环境的域名为null 生产环境域名为打包时设置的域名
         '/api': {
           target: 'http://localhost:6060',
           changeOrigin: true,

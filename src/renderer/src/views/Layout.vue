@@ -2,7 +2,16 @@
   <div class="layout">
     <div class="left">
       <div class="top-panel">
-        <div class="avatar"></div>
+        <div class="avatar">
+          <Avatar
+            ref="avatarRef"
+            :width="30"
+            :avatar="userInfoStore.userInfo.userId"
+            :update="true"
+            @click="showUserInfo"
+          >
+          </Avatar>
+        </div>
         <div class="top-menus">
           <div
             :class="['menu-item', item.codes.includes(route.meta.code) ? 'active' : '']"
@@ -40,9 +49,11 @@
       <router-view></router-view>
     </div>
   </div>
+  <UpdateUser ref="updateUserRef" @reloadInfo="reloadInfoHandler"></UpdateUser>
 </template>
 
 <script setup>
+import UpdateUser from './UpdateUser.vue'
 import { ref, reactive, getCurrentInstance, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const { proxy } = getCurrentInstance()
@@ -148,6 +159,17 @@ const listenerMessage = () => {
     },
     { immediate: true, deep: true }
   )
+}
+
+const updateUserRef = ref()
+const showUserInfo = () => {
+  updateUserRef.value.show()
+}
+
+const avatarRef = ref()
+const reloadInfoHandler = (date) => {
+  userInfoStore.setInfo(date)
+  avatarRef.value.updateAvatar()
 }
 
 onMounted(() => {
