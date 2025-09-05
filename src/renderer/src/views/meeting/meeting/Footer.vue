@@ -58,9 +58,11 @@
     </div>
   </div>
   <SelectScreen ref="selectScreenRef"></SelectScreen>
+  <InviteMember ref="inviteMemberRef"></InviteMember>
 </template>
 
 <script setup>
+import InviteMember from '../invite/InviteMember.vue'
 import SelectScreen from './SelectScreen.vue'
 import MicIcon from '@/components/MicIcon.vue'
 import { ref, reactive, getCurrentInstance, nextTick, onMounted, onUnmounted } from 'vue'
@@ -107,6 +109,31 @@ const shareScreenClickHandler = () => {
     return
   }
   selectScreenRef.value.show()
+}
+
+const inviteMemberRef = ref()
+const clickHandler = (item) => {
+  console.log(item)
+  if (item.showActive) {
+    buttons.value.forEach((btn) => {
+      if (btn.btnType == item.btnType && !item.showActive) {
+        btn.showActive = true
+      } else {
+        btn.showActive = false
+      }
+    })
+  }
+  switch (item.btnType) {
+    case 'invite':
+      inviteMemberRef.value.show()
+      break
+    case 'members':
+      // shareScreenHandler()
+      break
+    case 'chat':
+      // inviteMemberRef.value.show()
+      break
+  }
 }
 
 const shareScreenHandler = () => {

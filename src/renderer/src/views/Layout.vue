@@ -63,6 +63,8 @@ import { useUserInfoStore } from '@/store/UserInfoStore'
 const userInfoStore = useUserInfoStore()
 import { useContactStore } from '@/store/UserContactStore'
 const contactStore = useContactStore()
+import { useMeetingStore } from '@/store/MeetingStore'
+const meetingStore = useMeetingStore()
 import { mitter } from '@/eventbus/eventBus.js'
 
 // 顶部左侧菜单数据，使用 ref 做响应式处理
@@ -116,7 +118,7 @@ const jumpMenu = (menus) => {
 
 const listenerMessage = () => {
   window.electron.ipcRenderer.on('mainMessage', (e, result) => {
-    // console.log('mainMessage', result)
+    console.log('mainMessage', result)
     switch (result.messageType) {
       case 8: //好友申请
         contactStore.updateLastUpdateTime()
@@ -133,11 +135,53 @@ const listenerMessage = () => {
         }
         proxy.Alert(`[${result.sendUserNickName}${msg}]`)
         break
+      case 1: //邀请入会
+        const newMember = result.messageContent.newMembaer
+        if (newMember.userId === userInfoStore.userInfo.userId) {
+          meetingStore.updateMeeting(true)
+        }
+        break
+      case 9:
+        if (meetingStore.inMeeting) {
+          return
+        }
+        const { meetingName, meetingId, inviteUserName } = result.messageContent
+        proxy.Confirm({
+          message: `【${inviteUserName}】邀请你加入会议【${meetingName}】`,
+          okText: '接受邀请',
+          cancelText: '拒绝',
+          okfun: () => {
+            acceptInvite(meetingId)
+          }
+        })
+
+        break
       default:
         console.log('未知消息类型', result)
         break
     }
   })
+
+  const acceptInvite = async (meetingId) => {
+    console.log('acceptInvite', meetingId)
+    let result = await proxy.Request({
+      url: proxy.Api.acceptInvite,
+      params: {
+        meetingId
+      }
+    })
+    if (!result) {
+      return
+    }
+    window.electron.ipcRenderer.send('openWindow', {
+      title: '会议详情',
+      windowId: 'meeting',
+      path: '/meeting',
+      width: 1310,
+      height: 800,
+      maximizable: true
+    })
+  }
 
   const loadContactApplyCount = async () => {
     let result = await proxy.Request({
@@ -184,6 +228,8 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .layout {
   display: flex;
+  position: relative;
+  z-index: 1;
 
   .left {
     width: 64px;
@@ -193,10 +239,11 @@ onUnmounted(() => {
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
-    -webkit-app-region: drag;
+    // -webkit-app-region: drag;
 
     .top-panel {
       text-align: center;
+      -webkit-app-region: drag;
 
       .avatar {
         display: flex;
@@ -281,5 +328,14 @@ onUnmounted(() => {
     width: 0;
     height: calc(100vh);
   }
+}
+</style>
+
+<style lang="scss">
+.el-overlay,
+.el-message-box__wrapper,
+.el-message-box {
+  -webkit-app-region: no-drag !important;
+  z-index: 99999 !important;
 }
 </style>

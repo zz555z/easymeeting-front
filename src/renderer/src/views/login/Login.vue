@@ -1,5 +1,5 @@
 <template>
-  <Header :show-max="false" :close-type="0"></Header>
+  <Header :show-max="false" :close-type="0" class="header"></Header>
   <div v-if="showLoading" class="login-panel">
     <img src="../../assets/img/loading.gif" />
     <div>正在登录...</div>
@@ -218,7 +218,7 @@ const loginOrRegisterSubmit = async () => {
       userInfoStore.setInfo(result.data)
       // localStorage.setItem('userInfo', JSON.stringify(result.data))
       router.push('/home')
-    }, 1500)
+    }, 500)
   } else {
     // console.log('isLogin', isLogin.value)
     proxy.Message.success('注册成功，请登录')
@@ -230,6 +230,10 @@ changeCheckCode()
 </script>
 
 <style lang="scss" scoped>
+// .header {
+//   position: relative;
+//   z-index: 20; // 设置更高的层级
+// }
 .title {
   height: 30px;
   -webkit-app-regoin: drag;
@@ -344,6 +348,8 @@ changeCheckCode()
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  // z-index: 10; // 设置较低的层级
+
   /* 让背景透明，可不设置 backgroundColor，或者设置 rgba 透明值，这里若想面板背景也透明可这样写：background-color: rgba(255, 255, 255, 0);  */
 }
 

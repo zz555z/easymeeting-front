@@ -11,7 +11,7 @@
   </div>
   <div class="contact-list">
     <div class="contact-item" v-for="item in contactList" :key="item.contactId">
-      <Avatar :avatar="item.contactId"></Avatar>
+      <Avatar :avatar="item.contactId" :update="true"></Avatar>
       <div class="nick-name">{{ item.nickName }}</div>
       <el-dropdown>
         <div class="iconfont icon-more"></div>

@@ -19,7 +19,7 @@
       <el-button type="primary" class="search-btn" @click="search">搜索</el-button>
     </div>
     <div class="user-info" v-if="userInfo && Object.keys(userInfo).length > 0">
-      <Avatar :avatar="userInfo?.userId"></Avatar>
+      <Avatar :avatar="userInfo.userId" :update="true"></Avatar>
       <div class="nick-name">{{ userInfo?.nickName }}</div>
       <div class="tips">
         <span v-if="userInfo.status == -1">自己</span>

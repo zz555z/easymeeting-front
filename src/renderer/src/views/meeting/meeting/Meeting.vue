@@ -34,7 +34,7 @@
               v-show="openVideoRef"
             ></video>
             <div v-show="!openVideoRef" class="user-info">
-              <Avatar :avatar="selectUserInfo.userId"></Avatar>
+              <Avatar :avatar="selectUserInfo.userId" :update="true"></Avatar>
               <div :class="['user-name', 'iconfont', proxy.Utils.getSexIcon(selectUserInfo.sex)]">
                 {{ selectUserInfo.nickName }}
               </div>

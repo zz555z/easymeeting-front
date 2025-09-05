@@ -46,7 +46,7 @@
           )
         "
       >
-        <Avatar :avatar="userInfoStore.userInfo.userid" :update="true"></Avatar>
+        <Avatar :avatar="userInfoStore.userInfo.userId" :update="true"></Avatar>
 
         <div :class="['user-name', 'iconfont', proxy.Utils.getSexIcon(userInfoStore.userInfo.sex)]">
           {{ userInfoStore.userInfo.nickName }}
@@ -288,7 +288,7 @@ const initLocalCameraStream = async (video, audio) => {
         audio
       })
       .catch((error) => {
-        console.log(error)
+        console.error(error)
       })
     cameraStream = stream
     resolve(stream)
@@ -408,7 +408,7 @@ const onUserJoin = async (messageContent) => {
   // 如果是自己加入会议，为每个现有成员创建对等连接并发送offer
   memberList.value.forEach((member) => {
     const peerConnection = createPeerConnection(member)
-    console.log('peerConnection', member)
+    // console.log('peerConnection', member)
     // peerConnectionMap.set(member.userId, peerConnection)
     sendOffer(peerConnection, userInfoStore.userInfo.userId, member.userId)
   })
@@ -437,7 +437,7 @@ const initMeetingListener = () => {
   window.electron.ipcRenderer.on(
     'meetingMessage',
     (e, { sendUserId, receiveUserId, messageContent, messageType }) => {
-      console.log('meetingMessage', { sendUserId, receiveUserId, messageContent, messageType })
+      // console.log('meetingMessage', { sendUserId, receiveUserId, messageContent, messageType })
       switch (messageType) {
         case 1: // 用户加入
           // console.log('用户加入', messageContent)
@@ -525,7 +525,7 @@ const onPeerConnection = async ({ sendUserId, receiveUserId, messageContent }) =
     return item.userId === sendUserId
   })
 
-  console.log('onPeerConnection', { sendUserId, receiveUserId, messageContent, signalData, member })
+  // console.log('onPeerConnection', { sendUserId, receiveUserId, messageContent, signalData, member })
 
   // 创建WebRTC连接实例
   const peerConnection = createPeerConnection(member)
@@ -673,7 +673,7 @@ const shareScreenHandler = async (_screenId) => {
 }
 
 const layoutChangeHandler = (type) => {
-  console.log('member-layoutChangeHandler', type)
+  // console.log('member-layoutChangeHandler', type)
   if (type === layoutType.value) {
     return
   }

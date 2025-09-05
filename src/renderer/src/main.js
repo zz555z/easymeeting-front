@@ -41,6 +41,6 @@ app.config.globalProperties.Verify = Verify
 app.config.globalProperties.Message = Message
 app.config.globalProperties.Confirm = Confirm
 app.config.globalProperties.Alert = Alert
-app.config.globalProperties.imageAccept = '.jpg,.png,.gif,.bmp,.webp'
+app.config.globalProperties.imageAccept = '.jpg,.png,.gif,.bmp,.webp,.jpeg'
 // 保证在最下面
 app.mount('#app')

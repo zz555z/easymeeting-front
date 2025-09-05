@@ -9,13 +9,15 @@ const Confirm = ({
   cancelText = '取消',
   cancelfun
 }) => {
+  console.log('okfun', okfun)
   ElMessageBox.confirm(message, '提示', {
     'close-on-click-modal': false,
     confirmButtonText: okText,
     cancelButtonText: cancelText,
     showCancelButton: showCancelBtn,
     showClose: showClose,
-    type: 'info'
+    type: 'info',
+    zIndex: 9999 // 修正为zIndex
   })
     .then(async () => {
       if (okfun) {

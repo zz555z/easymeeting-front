@@ -75,7 +75,7 @@ const selectFile = (file) => {
 
 const emit = defineEmits(['reloadInfo'])
 const submitForm = () => {
-  console.log('submitFormurl', formData.value)
+  // console.log('submitFormurl', formData.value)
   formDataRef.value.validate(async (valid) => {
     if (!valid) {
       return

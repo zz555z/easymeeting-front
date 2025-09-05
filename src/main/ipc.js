@@ -32,18 +32,16 @@ const onLoginOrRegister = () => {
 
 const onWinTitleOp = () => {
   ipcMain.on('winTilteOp', (e, { action, data }) => {
-    console.log('当前动作：' + action)
+    // console.log('当前动作：' + action)
     const webContents = e.sender
     const win = BrowserWindow.fromWebContents(webContents)
 
     switch (action) {
       case 'close':
         if (data.closeType == 0) {
-          console.log('强制关闭')
           win.forceClose = data.forceClose
           win.close()
         } else {
-          console.log('正常关闭')
           win.setSkipTaskbar(true)
           win.hide()
         }
