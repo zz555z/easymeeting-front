@@ -144,9 +144,20 @@ const listenerMessage = () => {
         break
       case 3: //退出会议
         // console.log('邀请入会', result)
-        const exitUserId = JSON.parse(result.messageContent).exitUserId
-        console.log('退出会议', exitUserId)
-        if (exitUserId === userInfoStore.userInfo.userId) {
+        const { exitUserId, exitStatus } = JSON.parse(result.messageContent)
+        console.log('退出会议', exitUserId, exitStatus)
+
+        if ((exitStatus == 3 || exitStatus == 4) && exitUserId === userInfoStore.userInfo.userId) {
+          proxy.Confirm({
+            message: `你被管理员移出会议`,
+            showCancelBtn: false
+          })
+        }
+
+        if (
+          (exitStatus == 3 || exitStatus == 4 || exitStatus == 2) &&
+          exitUserId === userInfoStore.userInfo.userId
+        ) {
           meetingStore.updateMeeting(false)
         }
         break
@@ -165,6 +176,7 @@ const listenerMessage = () => {
         })
 
         break
+
       default:
         console.log('未知消息类型', result)
         break

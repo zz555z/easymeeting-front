@@ -495,7 +495,8 @@ const onUserLeave = (messageContent) => {
   }
 
   memberList.value = memberList.value.filter(
-    (item) => item.userId != exitUserId && item.status == 1
+    // (item) => item.userId != exitUserId && item.status == 1
+    (item) => item.userId != exitUserId
   )
 
   meetingStore.setMemberList(memberList.value)

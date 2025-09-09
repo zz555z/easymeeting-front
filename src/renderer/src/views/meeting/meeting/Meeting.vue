@@ -48,7 +48,7 @@
         ></SplitLine>
 
         <div v-show="memberOpened || chatOpened" :style="{ width: rightWidth + 'px' }">
-          {{ memberOpened ? '成员列表' : '' }}
+          <MemberPanel v-show="memberOpened" ref="memberPanelRef"> </MemberPanel>
           {{ chatOpened ? '聊天列表' : '' }}
         </div>
       </div>
@@ -65,6 +65,7 @@
 </template>
 
 <script setup>
+import MemberPanel from '../member/MemberPanel.vue'
 import SplitLine from './SplitLine.vue'
 import MemberList from './MemberList.vue'
 import Footer from './Footer.vue'

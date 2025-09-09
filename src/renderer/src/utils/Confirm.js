@@ -9,7 +9,6 @@ const Confirm = ({
   cancelText = '取消',
   cancelfun
 }) => {
-  console.log('okfun', okfun)
   ElMessageBox.confirm(message, '提示', {
     'close-on-click-modal': false,
     confirmButtonText: okText,
