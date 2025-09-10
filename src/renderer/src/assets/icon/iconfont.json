@@ -13,6 +13,13 @@
       "unicode_decimal": 983373
     },
     {
+      "icon_id": "77106",
+      "name": "表情",
+      "font_class": "biaoqing",
+      "unicode": "f00f5",
+      "unicode_decimal": 983285
+    },
+    {
       "icon_id": "201692",
       "name": "3.1 好友",
       "font_class": "31haoyou",
@@ -104,6 +111,13 @@
       "unicode_decimal": 58676
     },
     {
+      "icon_id": "4893191",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "ec17",
+      "unicode_decimal": 60439
+    },
+    {
       "icon_id": "5388066",
       "name": "邮件_o",
       "font_class": "youjian_o",
@@ -137,6 +151,13 @@
       "font_class": "ziyuanxhdpi",
       "unicode": "e648",
       "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "7853653",
+      "name": "三个点",
+      "font_class": "sangedian",
+      "unicode": "e608",
+      "unicode_decimal": 58888
     },
     {
       "icon_id": "8288855",

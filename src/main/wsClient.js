@@ -76,6 +76,14 @@ const connectWs = () => {
         }
         mainWindow.webContents.send('mainMessage', data)
         break
+      case 5: //文本消息
+      case 6: //媒体消息
+      case 7: //媒体消息更新
+        if (!meetingWindow) {
+          return
+        }
+        meetingWindow.webContents.send('chatMessage', data)
+        break
     }
   }
   ws.onerror = (error) => {

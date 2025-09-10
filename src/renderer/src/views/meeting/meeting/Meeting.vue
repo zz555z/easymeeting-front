@@ -49,7 +49,8 @@
 
         <div v-show="memberOpened || chatOpened" :style="{ width: rightWidth + 'px' }">
           <MemberPanel v-show="memberOpened" ref="memberPanelRef"> </MemberPanel>
-          {{ chatOpened ? '聊天列表' : '' }}
+          <!-- {{ chatOpened ? '聊天列表' : '' }} -->
+          <ChatPanel v-show="chatOpened" ref="chatPanelRef"></ChatPanel>
         </div>
       </div>
       <Footer
@@ -65,6 +66,7 @@
 </template>
 
 <script setup>
+import ChatPanel from '../chat/ChatPanel.vue'
 import MemberPanel from '../member/MemberPanel.vue'
 import SplitLine from './SplitLine.vue'
 import MemberList from './MemberList.vue'

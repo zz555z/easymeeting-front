@@ -185,6 +185,10 @@ let localStream = null
  * 注意：此函数不接收参数，也不返回值，但会修改组件内部状态（如 localStream）。
  */
 const initLocalStream = async () => {
+  // if (!props.deviceInfo.micOpen && !props.deviceInfo.cameraOpen) {
+  //   return
+  // }
+
   await nextTick()
   localStream = new MediaStream()
 

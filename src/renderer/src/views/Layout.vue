@@ -184,7 +184,6 @@ const listenerMessage = () => {
   })
 
   const acceptInvite = async (meetingId) => {
-    console.log('acceptInvite', meetingId)
     let result = await proxy.Request({
       url: proxy.Api.acceptInvite,
       params: {

@@ -41,6 +41,10 @@ const onWinTitleOp = () => {
         if (data.closeType == 0) {
           win.forceClose = data.forceClose
           win.close()
+          const meetingWindow = getWindow('meeting')
+          if (meetingWindow) {
+            meetingWindow.close()
+          }
         } else {
           win.setSkipTaskbar(true)
           win.hide()
