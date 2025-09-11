@@ -18,7 +18,9 @@ import {
   onChangeLocalFolder,
   onLogout,
   onOpenWindow,
-  onSendPeerConnection
+  onSendPeerConnection,
+  onSelectFile,
+  onUploadChatFile
 } from './ipc'
 
 function createWindow() {
@@ -105,6 +107,8 @@ onChangeLocalFolder()
 onLogout()
 onOpenWindow()
 onSendPeerConnection()
+onSelectFile()
+onUploadChatFile()
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

@@ -275,6 +275,52 @@ const onSendPeerConnection = () => {
     sendWsData(JSON.stringify(peerData))
   })
 }
+const onSelectFile = () => {
+  ipcMain.handle('selectFile', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+      title: '选择文件',
+      properties: ['openFile']
+    })
+    if (canceled) {
+      return {}
+    }
+    const filePath = filePaths[0]
+    const { size } = await fs.promises.stat(filePath)
+    return {
+      fileName: path.basename(filePath), // 文件名（带扩展名）
+      fileSize: size,
+      filePath
+    }
+  })
+}
+
+const onUploadChatFile = () => {
+  ipcMain.on('uploadChatFile', (e, { uploadUrl, messageId, sendTime, filePath }) => {
+    console.log(uploadUrl, messageId, sendTime, filePath)
+    const meetingWin = getWindow('meeting')
+    const formData = new FormData()
+    formData.append('messageId', messageId)
+    formData.append('sendTime', sendTime)
+    formData.append('multipartFile', fs.createReadStream(filePath))
+    const token = store.getData('userInfo')?.token
+    axios
+      .post(uploadUrl, formData, {
+        headers: { 'Content-Type': 'multipart/form-data', token: token },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            if (meetingWin) {
+              meetingWin.webContents.send('uploadProgress', { messageId, percent })
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('文件上传失败', error)
+      })
+  })
+}
+
 export {
   onLogout,
   onLoginOrRegister,
@@ -288,5 +334,7 @@ export {
   onGetSysSetting,
   onChangeLocalFolder,
   onOpenWindow,
-  onSendPeerConnection
+  onSendPeerConnection,
+  onSelectFile,
+  onUploadChatFile
 }

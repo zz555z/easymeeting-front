@@ -162,6 +162,53 @@ const sendMessageDo = async ({
     callBack(result.data)
   }
 }
+const getFileTypeByName = (fileName) => {
+  const fileSuffix = fileName.substr(fileName.lastIndexOf('.') + 1)
+  return getFileType(fileSuffix)
+}
+
+const uploadFile = async () => {
+  const { filePath, fileName, fileSize } = await window.electron.ipcRenderer.invoke('selectFile')
+  if (!filePath) {
+    return
+  }
+  if (fileSize == 0) {
+    proxy.Message.warning('空文件无法上传')
+    return
+  }
+  const fileType = getFileTypeByName(fileName)
+
+  console.log(props.sysSetting)
+
+  if (fileType == 0 && fileSize > props.sysSetting.maxImageSize * 1024 * 1024) {
+    proxy.Message.error(`图片大小不能超过${props.sysSetting.maxImageSize}MB`)
+    return
+  }
+  if (fileType == 1 && fileSize > props.sysSetting.maxVideoSize * 1024 * 1024) {
+    proxy.Message.error(`视频大小不能超过${props.sysSetting.maxVideoSize}MB`)
+    return
+  }
+  if (fileType == 2 && fileSize > props.sysSetting.maxFileSize * 1024 * 1024) {
+    proxy.Message.error(`文件大小不能超过${props.sysSetting.maxFileSize}MB`)
+    return
+  }
+
+  sendMessageDo({
+    // messageContent,
+    messageType: 6,
+    fileName,
+    fileSize,
+    fileType,
+    callBack: ({ messageId, sendTime }) => {
+      window.electron.ipcRenderer.send('uploadChatFile', {
+        uploadUrl: import.meta.env.VITE_DOMAIN + proxy.Api.uploadChatFile,
+        messageId,
+        sendTime,
+        filePath
+      })
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

@@ -39,12 +39,26 @@ const listenersMessage = () => {
   })
 }
 
+const listenUploadProgress = () => {
+  window.electron.ipcRenderer.on('uploadProgress', (e, { messageId, percent }) => {
+    const message = dateSource.value.list.find((item) => {
+      return item.messageId == messageId
+    })
+    if (!message) {
+      return
+    }
+    message.uploadProgress = percent
+  })
+}
+
 onMounted(() => {
   listenersMessage()
+  listenUploadProgress()
 })
 
 onUnmounted(() => {
   window.electron.ipcRenderer.removeAllListeners('chatMessage')
+  window.electron.ipcRenderer.removeAllListeners('uploadProgress')
 })
 
 const sysSetting = ref()
@@ -56,6 +70,7 @@ const loadSysSetting = async () => {
   if (!result) {
     return
   }
+  // console.log('result', result)
   sysSetting.value = result.data
 }
 loadSysSetting()
