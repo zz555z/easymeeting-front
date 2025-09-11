@@ -140,7 +140,7 @@ const getToken = () => {
 }
 
 const getResroucePath = ({ messageId, thumbnail = false, fileType, sendTime }) => {
-  return `${import.meta.env.PROD ? import.meta.env.VITE_DOMAIN : ''}${Api.getResource}?messageId=${messageId}&fileTy`
+  return `${import.meta.env.PROD ? import.meta.env.VITE_DOMAIN : ''}${Api.getResource}?messageId=${messageId}&fileType=${fileType}&thumnail=${thumbnail}&sendTime=${sendTime}&token=${getToken()}`
 }
 
 const getAvatarPath = (userId, forceUpdate = false) => {

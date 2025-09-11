@@ -22,18 +22,43 @@ const router = useRouter()
 import { useUserInfoStore } from '@/store/UserInfoStore'
 const userInfoStore = useUserInfoStore()
 import { useMeetingStore } from '@/store/MeetingStore'
-import MessageItem from './MessageItem.vue'
 const meetingStore = useMeetingStore()
+import MessageItem from './MessageItem.vue'
 
 const loading = ref(false)
 const dateSource = ref({ list: [] })
 
+const sortMessage = () => {
+  dateSource.value.list.sort((a, b) => {
+    return a.messageId - b.messageId
+  })
+}
 const listenersMessage = () => {
   window.electron.ipcRenderer.on('chatMessage', async (e, data) => {
     console.log('chatMessage', data)
-
-    data.isMe = data.sendUserId === userInfoStore.userInfo.userId
-    dateSource.value.list.push(data)
+    switch (data.messageType) {
+      case 5: //文本消息
+      case 6: //媒体消息
+        meetingStore.addNoReadChatCount()
+        data.isMe = data.sendUserId === userInfoStore.userInfo.userId
+        dateSource.value.list.push(data)
+        sortMessage()
+        await nextTick()
+        console.log('dateSource.value.list', dateSource.value.list)
+        // 滚动条到底部
+        break
+      case 7: //文件上传完成消息
+        const messageItem = dateSource.value.list.find((item) => item.messageId === data.messageId)
+        if (!messageItem) {
+          return
+        }
+        messageItem.status = 1
+        messageItem.messageContent = data.messageContent
+        break
+      default:
+        console.log('未知消息类型', data)
+        break
+    }
 
     // console.log('dateSource.value.list', dateSource.value.list)
   })

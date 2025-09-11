@@ -64,8 +64,8 @@
         v-model="message"
         resize="none"
         :rows="6"
+        @keydown.ctrl.enter.prevent="sendMessage"
       ></el-input>
-      <!-- @keydown.ctrl.enter.prevent="sendMessage" -->
     </div>
     <div class="send-btn-panel">
       <div class="tips">Ctrl+Enter可以直接发送</div>
@@ -177,8 +177,6 @@ const uploadFile = async () => {
     return
   }
   const fileType = getFileTypeByName(fileName)
-
-  console.log(props.sysSetting)
 
   if (fileType == 0 && fileSize > props.sysSetting.maxImageSize * 1024 * 1024) {
     proxy.Message.error(`图片大小不能超过${props.sysSetting.maxImageSize}MB`)
