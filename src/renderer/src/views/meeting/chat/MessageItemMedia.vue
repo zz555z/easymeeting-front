@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, getCurrentInstance, nextTick, computed } from 'vue'
+import { ref, reactive, getCurrentInstance, nextTick, computed, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -29,6 +29,14 @@ const props = defineProps({
     default: {}
   }
 })
+
+const showMeadia = inject('showMeadia')
+const showMediaHandler = () => {
+  if (props.message.status == 0) {
+    return
+  }
+  showMeadia(props.message.messageId)
+}
 </script>
 
 <style lang="scss" scoped>

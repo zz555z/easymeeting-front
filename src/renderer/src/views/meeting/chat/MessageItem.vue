@@ -13,10 +13,10 @@
         {{ message.messageContent }}
         <div class="direct"></div>
       </div>
-      <MessageItemMeadia
+      <MessageItemMadia
         v-if="message.messageType == 6 && (message.fileType == 0 || message.fileType == 1)"
         :message="message"
-      ></MessageItemMeadia>
+      ></MessageItemMadia>
       <MessageItemFile
         v-if="message.messageType == 6 && message.fileType == 2"
         :message="message"
@@ -27,7 +27,7 @@
 
 <script setup>
 import MessageItemFile from './MessageItemFile.vue'
-import MessageItemMeadia from './MessageItemMeadia.vue'
+import MessageItemMadia from './MessageItemMedia.vue'
 import { ref, reactive, getCurrentInstance, nextTick, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const { proxy } = getCurrentInstance()

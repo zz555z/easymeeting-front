@@ -14,7 +14,7 @@
 
 <script setup>
 import ChatSend from './ChatSend.vue'
-import { ref, reactive, getCurrentInstance, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, getCurrentInstance, nextTick, onMounted, onUnmounted, provide } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const { proxy } = getCurrentInstance()
 const route = useRoute()
@@ -76,15 +76,18 @@ const listenUploadProgress = () => {
   })
 }
 
-onMounted(() => {
-  listenersMessage()
-  listenUploadProgress()
-})
-
-onUnmounted(() => {
-  window.electron.ipcRenderer.removeAllListeners('chatMessage')
-  window.electron.ipcRenderer.removeAllListeners('uploadProgress')
-})
+const listenDownloadProgress = () => {
+  window.electron.ipcRenderer.on('downloadProgress', (e, { messageId, percent, localFilePath }) => {
+    const message = dateSource.value.list.find((item) => {
+      return item.messageId == messageId
+    })
+    if (!message) {
+      return
+    }
+    message.downloadProgress = percent
+    message.localFilePath = localFilePath
+  })
+}
 
 const sysSetting = ref()
 const loadSysSetting = async () => {
@@ -99,6 +102,42 @@ const loadSysSetting = async () => {
   sysSetting.value = result.data
 }
 loadSysSetting()
+
+onMounted(() => {
+  listenersMessage()
+  listenUploadProgress()
+  listenDownloadProgress()
+})
+
+onUnmounted(() => {
+  window.electron.ipcRenderer.removeAllListeners('chatMessage')
+  window.electron.ipcRenderer.removeAllListeners('uploadProgress')
+  window.electron.ipcRenderer.removeAllListeners('downloadProgress')
+})
+
+provide('showMeadia', (messageId) => {
+  let mediaList = dateSource.value.list
+    .filter((item) => {
+      return item.status == 1 && (item.fileType == 0 || item.fileType == 1)
+    })
+    .map((item) => {
+      return {
+        messageId: item.messageId + '',
+        fileType: item.fileType,
+        sendTime: item.sendTime,
+        fileName: item.fileName
+      }
+    })
+  window.electron.ipcRenderer.send('openWindow', {
+    title: '查看详情',
+    windowId: 'media',
+    path: '/showMedia',
+    width: 960,
+    height: 720,
+    data: { currentMessageId: messageId, mediaList: JSON.stringify(mediaList) },
+    maximizable: true
+  })
+})
 </script>
 
 <style lang="scss" scoped>

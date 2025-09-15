@@ -1,5 +1,5 @@
-import { desktopCapturer, ipcMain, shell, dialog } from 'electron'
-import { getWindow, saveWindow, delWindow } from './windowProxy'
+import { desktopCapturer, ipcMain, shell, dialog, app } from 'electron'
+import { getWindow, saveWindow, delWindow, getKeyByValue } from './windowProxy'
 import { BrowserWindow } from 'electron/main'
 
 import { startRecording, stopRecording } from './recording'
@@ -35,16 +35,16 @@ const onWinTitleOp = () => {
     // console.log('当前动作：' + action)
     const webContents = e.sender
     const win = BrowserWindow.fromWebContents(webContents)
-
+    console.log('当前窗口：' + getKeyByValue(win))
     switch (action) {
       case 'close':
         if (data.closeType == 0) {
           win.forceClose = data.forceClose
           win.close()
-          const meetingWindow = getWindow('meeting')
-          if (meetingWindow) {
-            meetingWindow.close()
-          }
+          // const meetingWindow = getWindow('meeting')
+          // if (meetingWindow) {
+          //   meetingWindow.close()
+          // }
         } else {
           win.setSkipTaskbar(true)
           win.hide()
@@ -321,6 +321,63 @@ const onUploadChatFile = () => {
   })
 }
 
+const onDowloadFile = () => {
+  ipcMain.handle('download', async (e, { url, fileName, messageId, sendTime }) => {
+    const { filePath } = await dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+      title: '保存文件',
+      defaultPath: path.join(app.getPath('downloads'), fileName),
+      properties: ['createDirectory']
+    })
+    if (!filePath) {
+      return
+    }
+    const suffix = fileName.substring(fileName.lastIndexOf('.'))
+    downloadFile(messageId, sendTime, suffix, url, filePath)
+    return filePath
+  })
+}
+
+const downloadFile = (messageId, sendTime, suffix, url, savePath) => {
+  const meetingWin = getWindow('meeting')
+  return new Promise(async (resolve, reject) => {
+    let response = await axios({
+      method: 'post',
+      url: url,
+      responseType: 'stream',
+      data: {
+        messageId,
+        sendTime,
+        suffix,
+        token: store.getData('userInfo')?.token
+      },
+      headers: {
+        'Content-type': 'multipart/form-data'
+      },
+      onDownloadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          if (meetingWin) {
+            meetingWin.webContents.send('downloadProgress', {
+              messageId,
+              percent,
+              localFilePath: savePath
+            })
+          }
+        }
+      }
+    })
+    const stream = fs.createWriteStream(savePath)
+    response.data.pipe(stream)
+    stream.on('finish', () => {
+      console.log('stream-finish')
+      stream.close()
+      resolve()
+    })
+    stream.on('error', (err) => {
+      console.log('stream-err', err)
+    })
+  })
+}
 export {
   onLogout,
   onLoginOrRegister,
@@ -336,5 +393,6 @@ export {
   onOpenWindow,
   onSendPeerConnection,
   onSelectFile,
-  onUploadChatFile
+  onUploadChatFile,
+  onDowloadFile
 }

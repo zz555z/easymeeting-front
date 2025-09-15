@@ -6,13 +6,13 @@
       <el-progress type="circle" :percentage="message.uploadProgress || 0" :width="80" />
     </div>
 
-    <div v-if="message.downloadProgress !== null" class="progress">
+    <div v-if="message.downloadProgress != null" class="progress">
       <div v-if="message.downloadProgress < 100" class="downloading">
         <span class="iconfont icon-bottom"></span>
         <el-progress :stroke-width="5" :percentage="message.downloadProgress" />
       </div>
       <div class="download-complete" v-else>
-        <div class="iconfont icon-select-bold download-success">下载完成</div>
+        <div class="iconfont arrow-down-bold download-success">下载完成</div>
         <div class="iconfont icon-folder" title="打开" @click="openLocalFile"></div>
       </div>
     </div>
@@ -34,6 +34,25 @@ const props = defineProps({
     default: {}
   }
 })
+
+const download = async () => {
+  const savePath = await window.electron.ipcRenderer.invoke('download', {
+    url: import.meta.env.VITE_DOMAIN + proxy.Api.downloadFile,
+    fileName: props.message.fileName,
+    messageId: props.message.messageId,
+    sendTime: props.message.sendTime
+  })
+  if (!savePath) {
+    return
+  }
+  props.message.downloadProgress = 0
+}
+
+const openLocalFile = () => {
+  window.electron.ipcRenderer.send('openLocalFile', {
+    localFilePath: props.message.localFilePath
+  })
+}
 </script>
 
 <style lang="scss" scoped>
