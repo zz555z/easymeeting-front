@@ -159,7 +159,7 @@ const sendMessageDo = async ({
     message.value = ''
   }
   if (callBack) {
-    callBack(result.data)
+    callBack(result.data.messageId, result.data.sendTime)
   }
 }
 const getFileTypeByName = (fileName) => {
@@ -197,7 +197,7 @@ const uploadFile = async () => {
     fileName,
     fileSize,
     fileType,
-    callBack: ({ messageId, sendTime }) => {
+    callBack: (messageId, sendTime) => {
       window.electron.ipcRenderer.send('uploadChatFile', {
         uploadUrl: import.meta.env.VITE_DOMAIN + proxy.Api.uploadChatFile,
         messageId,

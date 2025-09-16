@@ -27,10 +27,7 @@ const startRecording = (_sender, displayId, mic) => {
   let filePath = '/Users/zdd/IdeaProjects/easymeeting-front/tmp'
   filePath = path.join(filePath, new Date().getTime() + '_tmp.mp4')
   const { bounds, workArea } = getScreenInfo(displayId)
-  // console.log('bounds--->', bounds)
-  // console.log('workArea--->', workArea)
   const ffmpeg = getFFmpgPath()
-  // console.log('ffmpeg--->', ffmpeg)
   // macOS 下使用 avfoundation 框架，适配屏幕录制 + 音频采集
   let args = [
     '-f',
@@ -90,12 +87,10 @@ const startRecording = (_sender, displayId, mic) => {
   })
   ffmpegProcess.stderr.on('data', (data) => {
     const output = data.toString()
-    // console.log(output)
     const timeMatch = output.match(/time=(\S+)/)
     if (timeMatch && timeMatch[1]) {
       const seconds = parseTime(timeMatch[1])
       if (seconds > currentTime) {
-        // console.log('time--->', seconds)
         sender.send('recordTime', seconds)
         currentTime = seconds
       }
@@ -145,8 +140,6 @@ const parseTime = (timeStr) => {
 
 const getScreenInfo = (displayId) => {
   const displays = screen.getAllDisplays()
-  // console.log('displays--->', displays)
-  // console.log('displayId--->', displayId)
 
   return displays.find((item) => {
     return item.id == displayId
@@ -154,7 +147,6 @@ const getScreenInfo = (displayId) => {
 }
 
 const stopRecording = () => {
-  // console.log('收到消息', ffmpegProcess)
   if (ffmpegProcess) {
     ffmpegProcess.kill('SIGINT')
   }

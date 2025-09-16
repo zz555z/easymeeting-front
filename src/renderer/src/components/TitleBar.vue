@@ -102,7 +102,6 @@ const maximize = () => {
 onMounted(() => {
   isMax.value = false
   window.electron.ipcRenderer.on('winIsMax', (e, result) => {
-    // console.log('onwinIsMax', result)
     isMax.value = result
   })
 })

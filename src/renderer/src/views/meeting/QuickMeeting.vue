@@ -85,7 +85,6 @@ const rules = {
 const show = () => {
   dialogConfig.show = true
   // dialogConfig.value.show = true
-  // console.log(userInfoStore.userInfo)
   nextTick(() => {
     formDataRef.value.resetFields()
     formData.value = {

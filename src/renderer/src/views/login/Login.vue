@@ -115,7 +115,6 @@ const salt = 'easymetting'
 const errorMsg = ref()
 const checkCodeUrl = ref(null)
 const changeCheckCode = async () => {
-  // console.log('api', proxy.Api.checkCode)
   let result = await proxy.Request({
     url: proxy.Api.checkCode
   })
@@ -183,10 +182,6 @@ const loginOrRegisterSubmit = async () => {
     showLoading.value = true
   }
 
-  // console.log('formData.value', formData.value)
-  // console.log('salt', salt)
-  // console.log('md5', md5(formData.value.password + salt))
-
   let result = await proxy.Request({
     url: isLogin.value ? proxy.Api.login : proxy.Api.register,
     showError: false,
@@ -207,7 +202,6 @@ const loginOrRegisterSubmit = async () => {
   if (!result) {
     return
   }
-  // console.log('result', result)
 
   if (isLogin.value) {
     setTimeout(async () => {
@@ -220,7 +214,6 @@ const loginOrRegisterSubmit = async () => {
       router.push('/home')
     }, 500)
   } else {
-    // console.log('isLogin', isLogin.value)
     proxy.Message.success('注册成功，请登录')
     chageOpType()
   }

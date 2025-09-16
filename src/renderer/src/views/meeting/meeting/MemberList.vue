@@ -115,7 +115,6 @@ const gridStyle = computed(() => {
     return ''
   }
   const { rows, clos } = calculateGrid(memberList.value.length + 1)
-  // console.log(rows, clos)
   return {
     gridTemplateRows: `repeat(${rows}, 1fr)`,
     gridTemplateColumns: `repeat(${clos}, 1fr)`
@@ -361,7 +360,6 @@ const createPeerConnection = (member) => {
 
   // 监听媒体轨道事件，将接收到的媒体流绑定到对应视频元素
   peerConnection.ontrack = (e) => {
-    // console.log('ontrack', e)
     const removeVideo = document.querySelector('#member_' + member.userId)
     removeVideo.srcObject = e.streams[0]
   }
@@ -382,8 +380,6 @@ const createPeerConnection = (member) => {
  * @returns {Promise<void>}
  */
 const onUserJoin = async (messageContent) => {
-  // console.log(messageContent)
-
   // 提取新加入的成员信息和所有成员列表，并按加入时间排序
   const newMember = messageContent.meetingMemberDto
   const allMemberList = messageContent.meetingMemberDtoList.sort((a, b) => a.joinTime - b.joinTime)
@@ -397,9 +393,6 @@ const onUserJoin = async (messageContent) => {
   meetingStore.setMemberList(memberList.value)
   meetingStore.setAllMemberList(allMemberList)
 
-  // console.log('memberList', meetingStore.memberList)
-  // console.log('allMemberList', meetingStore.allMemberList)
-
   await nextTick()
 
   // 如果是其他用户加入会议，显示加入提示并创建对等连接
@@ -412,8 +405,6 @@ const onUserJoin = async (messageContent) => {
   // 如果是自己加入会议，为每个现有成员创建对等连接并发送offer
   memberList.value.forEach((member) => {
     const peerConnection = createPeerConnection(member)
-    // console.log('peerConnection', member)
-    // peerConnectionMap.set(member.userId, peerConnection)
     sendOffer(peerConnection, userInfoStore.userInfo.userId, member.userId)
   })
 }
@@ -444,12 +435,10 @@ const initMeetingListener = () => {
       console.log('meetingMessage', { sendUserId, receiveUserId, messageContent, messageType })
       switch (messageType) {
         case 1: // 用户加入
-          console.log('用户加入', messageContent)
           // TODO 用户加入
           onUserJoin(messageContent)
           break
         case 2: // 建立peerConnection
-          // console.log('建立peerConnection', messageContent)
           onPeerConnection({ sendUserId, receiveUserId, messageContent })
           break
         case 3: // 退出会议
@@ -529,8 +518,6 @@ const onPeerConnection = async ({ sendUserId, receiveUserId, messageContent }) =
   const member = memberList.value.find((item) => {
     return item.userId === sendUserId
   })
-
-  // console.log('onPeerConnection', { sendUserId, receiveUserId, messageContent, signalData, member })
 
   // 创建WebRTC连接实例
   const peerConnection = createPeerConnection(member)
@@ -638,7 +625,6 @@ const sendOpenVideoChangeMessage = async (open) => {
 }
 
 const shareScreenHandler = async (_screenId) => {
-  // console.log('shareScreenHandler', _screenId)
   sendOpenVideoChangeMessage(
     (props.deviceInfo.cameraOpen && props.deviceInfo.cameraEnable) ||
       !proxy.Utils.isEmpty(_screenId)
@@ -678,7 +664,6 @@ const shareScreenHandler = async (_screenId) => {
 }
 
 const layoutChangeHandler = (type) => {
-  // console.log('member-layoutChangeHandler', type)
   if (type === layoutType.value) {
     return
   }

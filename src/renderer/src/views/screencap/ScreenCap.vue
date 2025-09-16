@@ -66,7 +66,6 @@ const recordStatus = ref(0) // 0: 初始化, 1: 开始录制, 2: 录制中 3:停
 const selectScreenDisplayId = ref()
 
 const openOrClose = () => {
-  // console.log(micInfoRef.value) // 检查类型
   micInfoRef.value.toggleMic()
 }
 const screenDisplayIdHandler = (_selectScreenDisplayIdHandler) => {
@@ -74,7 +73,6 @@ const screenDisplayIdHandler = (_selectScreenDisplayIdHandler) => {
 }
 const startRecord = () => {
   recordStatus.value = 1
-  // console.log('selectScreenDisplayId.value---->', selectScreenDisplayId.value)
   window.electron.ipcRenderer.invoke('startRecording', {
     displayId: selectScreenDisplayId.value,
     mic: ''
@@ -90,7 +88,6 @@ const recordTime = ref(1)
 const filePath = ref()
 const listenRecordTime = () => {
   window.electron.ipcRenderer.on('recordTime', (e, _recordTime) => {
-    // console.log('recordTime', _recordTime)
     recordTime.value = _recordTime
     if (_recordTime == 1) {
       recordStatus.value = 2
@@ -98,7 +95,6 @@ const listenRecordTime = () => {
   })
 
   window.electron.ipcRenderer.on('finishReording', (e, date) => {
-    // console.log('finishReording', date.filePath)
     recordStatus.value = 4
     filePath.value = date.filePath
   })

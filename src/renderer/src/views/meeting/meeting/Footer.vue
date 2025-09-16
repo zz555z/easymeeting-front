@@ -114,7 +114,6 @@ const shareScreenClickHandler = () => {
 const emit = defineEmits(['openMember', 'openChat'])
 const inviteMemberRef = ref()
 const clickHandler = (item) => {
-  // console.log(item)
   if (item.showActive) {
     buttons.value.forEach((btn) => {
       if (btn.btnType == item.btnType && !item.showActive) {

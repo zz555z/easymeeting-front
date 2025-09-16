@@ -32,10 +32,8 @@ const onLoginOrRegister = () => {
 
 const onWinTitleOp = () => {
   ipcMain.on('winTilteOp', (e, { action, data }) => {
-    // console.log('当前动作：' + action)
     const webContents = e.sender
     const win = BrowserWindow.fromWebContents(webContents)
-    console.log('当前窗口：' + getKeyByValue(win))
     switch (action) {
       case 'close':
         if (data.closeType == 0) {
@@ -85,7 +83,6 @@ const onLoginSuccess = () => {
 const onGetScreenSource = () => {
   ipcMain.handle('getScreenSource', async (event, opts) => {
     const sources = await desktopCapturer.getSources(opts)
-    // console.log('sources--->', sources)
     return sources
       .filter((source) => {
         const size = source.thumbnail.getSize()
@@ -216,7 +213,6 @@ const openWindow = ({
         preCloseWindow(windowId)
         event.preventDefault()
       }
-      // console.log('close')
       // delWindow(windowId)
     })
 
@@ -296,7 +292,6 @@ const onSelectFile = () => {
 
 const onUploadChatFile = () => {
   ipcMain.on('uploadChatFile', (e, { uploadUrl, messageId, sendTime, filePath }) => {
-    console.log(uploadUrl, messageId, sendTime, filePath)
     const meetingWin = getWindow('meeting')
     const formData = new FormData()
     formData.append('messageId', messageId)
@@ -369,7 +364,6 @@ const downloadFile = (messageId, sendTime, suffix, url, savePath) => {
     const stream = fs.createWriteStream(savePath)
     response.data.pipe(stream)
     stream.on('finish', () => {
-      console.log('stream-finish')
       stream.close()
       resolve()
     })

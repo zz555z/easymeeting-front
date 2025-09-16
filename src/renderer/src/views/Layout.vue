@@ -136,14 +136,12 @@ const listenerMessage = () => {
         proxy.Alert(`[${result.sendUserNickName}${msg}]`)
         break
       case 1: //邀请入会
-        // console.log('邀请入会', result)
         const newMember = result.messageContent.meetingMemberDto
         if (newMember.userId === userInfoStore.userInfo.userId) {
           meetingStore.updateMeeting(true)
         }
         break
       case 3: //退出会议
-        // console.log('邀请入会', result)
         const { exitUserId, exitStatus } = JSON.parse(result.messageContent)
         console.log('退出会议', exitUserId, exitStatus)
 

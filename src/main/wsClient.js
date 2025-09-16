@@ -40,7 +40,6 @@ const connectWs = () => {
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data)
     console.log('ws收到消息:', data)
-    // console.log('getWindowManage:', getWindowManage())
     const meetingWindow = getWindow('meeting')
     const mainWindow = getWindow('main')
     switch (data.messageType) {
@@ -49,11 +48,9 @@ const connectWs = () => {
       case 3: //退出房间
         if (mainWindow && (data.messageType == 1 || data.messageType == 3)) {
           mainWindow.webContents.send('mainMessage', data)
-          // console.log('mainMessage', data)
         }
         if (meetingWindow) {
           meetingWindow.webContents.send('meetingMessage', data)
-          // console.log('meetingMessage', data)
         }
         break
       case 11: //用户开启或关闭摄像头
@@ -87,11 +84,10 @@ const connectWs = () => {
     }
   }
   ws.onerror = (error) => {
-    // console.error('WebSocket error:', error)
+    console.error('WebSocket error:', error)
     ws.close()
   }
   ws.onclose = (event) => {
-    // console.log('WebSocket closed:', event)
     stopHeartBeat()
     reconnectWs()
   }

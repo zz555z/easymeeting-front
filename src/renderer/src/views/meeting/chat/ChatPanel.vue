@@ -4,9 +4,19 @@
       <div class="iconfont icon-liaotian">聊天</div>
     </div>
     <div class="chat-list" id="chat-list" ref="chatListRef">
-      <MessageItem v-for="item in dateSource.list" :key="item.id" :message="item">
-        <!-- {{ dateSource.list }} -->
-      </MessageItem>
+      <!-- <MessageItem v-for="item in dateSource.list" :key="item.id" :message="item"> </MessageItem> -->
+      <DataLoadList
+        ref="dataLoadListRef"
+        :dataSource="dateSource"
+        :loadMoreType="1"
+        :loading="loading"
+        @loadData="loadMessage"
+      >
+        <!-- <template #default="{ data, index }"> -->
+        <template #default="{ data }">
+          <MessageItem :message="data"> </MessageItem>
+        </template>
+      </DataLoadList>
     </div>
     <ChatSend :sysSetting="sysSetting"></ChatSend>
   </div>
@@ -26,7 +36,56 @@ const meetingStore = useMeetingStore()
 import MessageItem from './MessageItem.vue'
 
 const loading = ref(false)
-const dateSource = ref({ list: [] })
+const dateSource = ref({})
+
+const dataLoadListRef = ref()
+const loadMessage = async () => {
+  if (
+    Object.keys(dateSource.value).length > 0 &&
+    dateSource.value.pageNo == dateSource.value.pageTotal
+  ) {
+    return
+  }
+  loading.value = true
+  let pageNo = dateSource.value.pageNo || 0
+  pageNo++
+  let result = await proxy.Request({
+    url: proxy.Api.loadMessage,
+    params: {
+      pageNo,
+      maxMessageId: pageNo > 1 ? dateSource.value.list[0].messageId : null
+    }
+  })
+  if (!result || !result.data.list) {
+    console.warn('请求返回数据异常:', result)
+
+    return
+  }
+  loading.value = false
+
+  const queryMessageList = result.data.list.map((item) => {
+    item.isMe = userInfoStore.userInfo.userId == item.sendUserId
+    return item
+  })
+  let list = dateSource.value.list || []
+  list.unshift(...queryMessageList)
+  result.data.list = list
+  dateSource.value = result.data
+  sortMessage()
+  if (dateSource.value.pageNo > 1) {
+    await nextTick()
+    dataLoadListRef.value.gotoTop()
+  }
+}
+
+const showChantPanel = async () => {
+  await nextTick()
+  dataLoadListRef.value.gotoBottom(true)
+}
+
+defineExpose({
+  showChantPanel
+})
 
 const sortMessage = () => {
   dateSource.value.list.sort((a, b) => {
@@ -41,10 +100,13 @@ const listenersMessage = () => {
       case 6: //媒体消息
         meetingStore.addNoReadChatCount()
         data.isMe = data.sendUserId === userInfoStore.userInfo.userId
+        if (!dateSource.value.list) {
+          dateSource.value.list = []
+        }
         dateSource.value.list.push(data)
         sortMessage()
         await nextTick()
-        console.log('dateSource.value.list', dateSource.value.list)
+        dataLoadListRef.value.gotoBottom(true)
         // 滚动条到底部
         break
       case 7: //文件上传完成消息
@@ -59,8 +121,6 @@ const listenersMessage = () => {
         console.log('未知消息类型', data)
         break
     }
-
-    // console.log('dateSource.value.list', dateSource.value.list)
   })
 }
 
@@ -98,7 +158,6 @@ const loadSysSetting = async () => {
   if (!result) {
     return
   }
-  // console.log('result', result)
   sysSetting.value = result.data
 }
 loadSysSetting()

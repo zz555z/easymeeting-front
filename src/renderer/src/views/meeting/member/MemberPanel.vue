@@ -49,7 +49,6 @@ const isCreater = computed(() => {
   const creater = meetingStore.allMemberList.find((item) => {
     return item.memberType == 1
   })
-  // console.log(creater)
   if (creater.userId === userInfoStore.userInfo.userId) {
     return true
   }

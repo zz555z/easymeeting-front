@@ -47,7 +47,6 @@ const getMicrophones = async () => {
   let devices = []
   try {
     devices = await navigator.mediaDevices.enumerateDevices()
-    // console.log(devices)
   } finally {
     let defaultMic = devices.find((device) => {
       return device.kind == 'audioinput' && device.deviceId === 'default'

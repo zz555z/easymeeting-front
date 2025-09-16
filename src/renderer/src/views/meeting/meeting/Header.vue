@@ -64,7 +64,6 @@ const currentLayout = ref(layoutList.value[0])
 
 const selectLayout = (item) => {
   currentLayout.value = item
-  // console.log('selectLayout', currentLayout.value)
   layoutPopoverRef.value.hide()
   mitter.emit('layoutChange', item.type)
 }

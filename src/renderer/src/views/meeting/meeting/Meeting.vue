@@ -157,7 +157,6 @@ const forceMeeting = () => {
   titleBarRef.value.custClose()
 }
 const layoutChangeHandler = (type) => {
-  console.log('meeting-layoutChangeHandler', type)
   layoutType.value = type
 }
 
@@ -190,9 +189,13 @@ const openMemberHandler = () => {
 }
 
 const chatOpened = ref(false)
+const chatPanelRef = ref()
 const openChatHandler = () => {
   memberOpened.value = false
   chatOpened.value = !chatOpened.value
+  if (chatOpened.value) {
+    chatPanelRef.value.showChantPanel()
+  }
 }
 </script>
 

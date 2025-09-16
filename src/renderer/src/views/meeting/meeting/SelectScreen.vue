@@ -66,7 +66,6 @@ const emit = defineEmits(['shareScreen'])
 
 const submitForm = () => {
   dialogConfig.value.show = false
-  // console.log('submitForm', screenSource.value.id)
   mitter.emit('shareScreen', screenSource.value.id)
 }
 

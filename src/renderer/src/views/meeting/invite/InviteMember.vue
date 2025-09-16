@@ -75,7 +75,6 @@ const loadContactList = async () => {
     return item.userId
   })
   contactList.value = result.data.map((item) => {
-    console.log(item)
     if (inMeetingMembers.includes(item.contactId)) {
       item.disabled = true
       item.nickName = item.nickName + '(已入会)'

@@ -76,7 +76,6 @@ const request = (config) => {
     responseType = responseTypeJson,
     showError = true
   } = config
-  // console.log('request', config)
 
   let headers = {
     'X-Requested-With': 'XMLHttpRequest',

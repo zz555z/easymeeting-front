@@ -30,11 +30,8 @@ const getScreen = async () => {
       height: 300
     }
   })
-  // console.log('主进程获取的数据----》', screenSources.value)
   // screenDisplayId.value = screenSources.value[0].displayId
   screenDisplayId.value = screenSources.value[0].displayId
-
-  // console.log('screenDisplayId.value--->', screenSources.value[0].displayId)
 
   emit('selectScreenDisplayId', screenDisplayId.value)
 }

@@ -13,6 +13,8 @@ import NoData from '@/components/NoData.vue'
 import Dialog from '@/components/Dialog.vue'
 import Cover from '@/components/Cover.vue'
 import Avatar from '@/components/Avatar.vue'
+import DataLoadList from '@/components/DataLoadList.vue'
+
 import Request from '@/utils/Request.js'
 import { Api } from '@/utils/Api.js'
 import Utils from '@/utils/Utils.js'
@@ -33,6 +35,7 @@ app.component('NoData', NoData)
 app.component('Dialog', Dialog)
 app.component('Cover', Cover)
 app.component('Avatar', Avatar)
+app.component('DataLoadList', DataLoadList)
 
 app.config.globalProperties.Request = Request
 app.config.globalProperties.Api = Api
