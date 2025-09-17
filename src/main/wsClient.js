@@ -53,6 +53,14 @@ const connectWs = () => {
           meetingWindow.webContents.send('meetingMessage', data)
         }
         break
+      case 4: //结束会议
+        if (mainWindow) {
+          mainWindow.webContents.send('mainMessage', data)
+        }
+        if (meetingWindow) {
+          meetingWindow.webContents.send('meetingMessage', data)
+        }
+        break
       case 11: //用户开启或关闭摄像头
         if (!meetingWindow) {
           return

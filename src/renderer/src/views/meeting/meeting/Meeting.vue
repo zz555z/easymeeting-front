@@ -193,6 +193,7 @@ const chatPanelRef = ref()
 const openChatHandler = () => {
   memberOpened.value = false
   chatOpened.value = !chatOpened.value
+  meetingStore.updateChatOpen(chatOpened.value)
   if (chatOpened.value) {
     chatPanelRef.value.showChantPanel()
   }
