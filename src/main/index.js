@@ -21,7 +21,8 @@ import {
   onSendPeerConnection,
   onSelectFile,
   onUploadChatFile,
-  onDowloadFile
+  onDowloadFile,
+  onWindowCommunication
 } from './ipc'
 
 function createWindow() {
@@ -111,6 +112,7 @@ onSendPeerConnection()
 onSelectFile()
 onUploadChatFile()
 onDowloadFile()
+onWindowCommunication()
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

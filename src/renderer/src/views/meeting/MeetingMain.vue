@@ -49,6 +49,16 @@ const quickMeeting = () => {
   quickMeetingRef.value.show()
 }
 
+const reserveMeeting = () => {
+  window.electron.ipcRenderer.send('openWindow', {
+    title: '预定会议',
+    windowId: 'meetingReserve',
+    path: '/meetingReserve',
+    width: 375,
+    height: 700,
+    maximizable: false
+  })
+}
 const joinMeetingHandler = (addType = 0, screenId = '') => {
   window.electron.ipcRenderer.send('openWindow', {
     title: '会议详情',

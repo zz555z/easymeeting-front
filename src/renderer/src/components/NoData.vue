@@ -1,6 +1,6 @@
 <template>
   <div class="no-data">
-    <div class="iconfont icon-more"></div>
+    <div class="iconfont icon-kuaisukaishi"></div>
     <div class="msg">{{ msg }}</div>
   </div>
 </template>

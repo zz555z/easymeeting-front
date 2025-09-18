@@ -46,6 +46,10 @@ const formatDate = (timestamp) => {
 
 const formatDate2 = (timestamp, patten) => {
   const timestampTime = moment(timestamp)
+  if (!timestampTime.isValid()) {
+    console.info('无效的日期格式:', timestamp)
+    return // 或返回默认值，如 '00:00'
+  }
   return timestampTime.format(patten)
 }
 

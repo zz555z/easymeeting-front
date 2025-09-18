@@ -372,6 +372,15 @@ const downloadFile = (messageId, sendTime, suffix, url, savePath) => {
     })
   })
 }
+
+const onWindowCommunication = () => {
+  ipcMain.on('windowCommunication', (e, { windowId, data }) => {
+    const win = getWindow(windowId)
+    if (win) {
+      win.webContents.send('windowCommunication', data)
+    }
+  })
+}
 export {
   onLogout,
   onLoginOrRegister,
@@ -388,5 +397,6 @@ export {
   onSendPeerConnection,
   onSelectFile,
   onUploadChatFile,
-  onDowloadFile
+  onDowloadFile,
+  onWindowCommunication
 }

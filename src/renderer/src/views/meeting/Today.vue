@@ -52,14 +52,17 @@
           </div>
         </div>
       </template>
+      <NoData msg="暂无会议" v-else></NoData>
     </div>
   </div>
   <MeetingShare ref="shareMeetingRef" />
+  <AddMeeting ref="addMeetingRef" @joinMeeting="joinMeetingHandler"></AddMeeting>
 </template>
 
 <script setup>
+import AddMeeting from '../meeting/AddMeeting.vue'
 import MeetingShare from '../meeting/history/MeetingShare.vue'
-import { ref, reactive, getCurrentInstance, nextTick, watch } from 'vue'
+import { ref, reactive, getCurrentInstance, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 const { proxy } = getCurrentInstance()
 const router = useRouter()
@@ -78,6 +81,7 @@ const getCurrentMeeting = async () => {
     return
   }
   currentMeeting.value = result.data || {}
+  loadTodayMeeting()
 }
 
 const shareMeetingRef = ref({})
@@ -116,6 +120,52 @@ const finishMeeting = () => {
   })
 }
 
+const delMeeting = (item) => {
+  proxy.Confirm({
+    message: '确定要删除会议吗？',
+    okfun: async () => {
+      let result = await proxy.Request({
+        url: proxy.Api.delMeetingReserveByUser,
+        params: {
+          meetingId: item.meetingId
+        }
+      })
+      if (!result) {
+        return
+      }
+      loadTodayMeeting()
+    }
+  })
+}
+
+const addMeetingRef = ref({})
+
+const joinMeeting = (item) => {
+  addMeetingRef.value.show({ meetingId: item.meetingId })
+}
+const joinMeetingHandler = () => {
+  window.electron.ipcRenderer.send('openWindow', {
+    title: '会议详情',
+    windowId: 'meeting',
+    path: '/meeting',
+    width: 1310,
+    height: 800,
+    resizable: false
+  })
+}
+
+const meetingHistory = () => {
+  window.electron.ipcRenderer.send('openWindow', {
+    title: '全部会议',
+    windowId: 'meetingAll',
+    path: '/meetingAll',
+    width: 600,
+    height: 665,
+    data: {},
+    maximizable: false
+  })
+}
+
 watch(
   () => meetingStore.lastUpdate,
   (newVal, oldVal) => {
@@ -123,6 +173,19 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+onMounted(() => {
+  window.electron.ipcRenderer.on('windowCommunication', (e, data) => {
+    console.log('windowCommunication', data)
+    if (data === 'reload') {
+      loadTodayMeeting()
+    }
+  })
+})
+
+onUnmounted(() => {
+  window.electron.ipcRenderer.removeAllListeners('windowCommunication')
+})
 </script>
 
 <style lang="scss" scoped>
