@@ -78,7 +78,7 @@
 }
 
 .top-panel {
-  -webkit-app-region: drag;
+  // -webkit-app-region: drag;
   .avatar,
   .menu-item {
     -webkit-app-region: no-drag; /* 避免按钮被拖拽覆盖 */

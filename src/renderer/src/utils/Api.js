@@ -43,7 +43,7 @@ const Api = {
   // 管理后台
   loadUserList: '/admin/loadUserList', // 用户列表
   updateUserStatus: '/admin/updateUserStatus', // 修改用户状态
-  forceOffline: '/admin/forceOffline', // 强制下线
+  forceOffline: '/admin/forceLine', // 强制下线
   loadUpdateDataList: '/admin/loadUpdateList', // 获取更新列表
   delUpdate: '/admin/delUpdate', // 删除更新
   saveUpdate: '/admin/saveUpdate', // 保存更新

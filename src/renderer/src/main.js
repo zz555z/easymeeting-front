@@ -14,6 +14,7 @@ import Dialog from '@/components/Dialog.vue'
 import Cover from '@/components/Cover.vue'
 import Avatar from '@/components/Avatar.vue'
 import DataLoadList from '@/components/DataLoadList.vue'
+import Table from '@/components/Table.vue'
 
 import Request from '@/utils/Request.js'
 import { Api } from '@/utils/Api.js'
@@ -36,6 +37,7 @@ app.component('Dialog', Dialog)
 app.component('Cover', Cover)
 app.component('Avatar', Avatar)
 app.component('DataLoadList', DataLoadList)
+app.component('Table', Table)
 
 app.config.globalProperties.Request = Request
 app.config.globalProperties.Api = Api

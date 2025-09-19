@@ -39,6 +39,34 @@ const router = createRouter({
       component: () => import('@/views/meeting/history/MeetingMessage.vue')
     },
     {
+      path: '/admin',
+      name: '管理页面',
+      component: () => import('@/views/admin/AdminLayout.vue'),
+      redirect: '/userList',
+      children: [
+        {
+          path: '/userList',
+          name: '用户管理',
+          component: () => import('@/views/admin/UserList.vue')
+        },
+        {
+          path: '/meetingMange',
+          name: '会议管理',
+          component: () => import('@/views/admin/MeetingMange.vue')
+        },
+        {
+          path: '/appUpdate',
+          name: '应用更新',
+          component: () => import('@/views/admin/AppUpdate.vue')
+        },
+        {
+          path: '/sysSetting',
+          name: '系统设置',
+          component: () => import('@/views/admin/SysSetting.vue')
+        }
+      ]
+    },
+    {
       path: '/home',
       name: '主界面',
       component: () => import('@/views/Layout.vue'),

@@ -110,8 +110,14 @@ const leftBottomMenus = [
 ]
 
 const jumpMenu = (menus) => {
-  if (menus.btnType === 'admin' && !userInfoStore.userInfo.admin) {
-    proxy.$message.error('只有管理员可以访问此功能')
+  if (menus.btnType === 'admin' && userInfoStore.userInfo.admin) {
+    window.electron.ipcRenderer.send('openWindow', {
+      title: '管理后台',
+      windowId: 'adminWindow',
+      path: '/admin',
+      width: 1310,
+      height: 800
+    })
     return
   }
   router.push(menus.path)
@@ -175,7 +181,11 @@ const listenerMessage = () => {
           showCancelBtn: false
         })
         break
-
+      case 10:
+        proxy.Alert('你被管理员强制退出', async () => {
+          await window.electron.ipcRenderer.invoke('logout')
+          router.push('/')
+        })
       default:
         console.log('未知消息类型', result)
         break
