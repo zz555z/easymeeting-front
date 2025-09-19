@@ -26,17 +26,17 @@ const router = createRouter({
     {
       path: '/meetingAll',
       name: '全部会议',
-      component: () => import('@/views/meeting/reserve/MeetingAll.vue')
+      component: () => import('@/views/meeting/history/MeetingAll.vue')
     },
     {
       path: '/meetingMember',
       name: '会议成员',
-      component: () => import('@/views/meeting/reserve/MeetingMember.vue')
+      component: () => import('@/views/meeting/history/MeetingMember.vue')
     },
     {
       path: '/meetingMessage',
       name: '会议聊天记录',
-      component: () => import('@/views/meeting/reserve/MeetingMessage.vue')
+      component: () => import('@/views/meeting/history/MeetingMessage.vue')
     },
     {
       path: '/home',

@@ -2,16 +2,16 @@
   <div class="data-list">
     <DataLoadList :dataSource="dataSource" :loading="loading" @loadData="load">
       <template #default="{ data }">
-        <MeetingHistoryItem :data="data" @delRecrod="delRecrodHandler"></MeetingHistoryItem>
+        <MeetingReserveItem :data="data" @delRecrod="delRecrodHandler"></MeetingReserveItem>
       </template>
     </DataLoadList>
   </div>
 </template>
 
 <script setup>
-import MeetingHistoryItem from './MeetingHistoryItem.vue'
 import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import MeetingReserveItem from './MeetingReserveItem.vue'
 const { proxy } = getCurrentInstance()
 const router = useRouter()
 const route = useRoute()
@@ -31,7 +31,8 @@ const load = async () => {
   let result = await proxy.Request({
     url: proxy.Api.loadMeeting,
     params: {
-      pageNo
+      pageNo,
+      meetingStatus: 2
     }
   })
   if (!result) {

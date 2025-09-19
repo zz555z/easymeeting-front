@@ -1,5 +1,7 @@
 <template>
-  <div class="history-item">
+  <div v-if="!data.meetingName" class="reach-bottom">没有更多数据了</div>
+
+  <div class="history-item" v-else>
     <div class="date-week">{{ proxy.Utils.getWeekAndDate(data.startTime) }}</div>
     <div class="meeting-panel">
       <div class="time-panel">
@@ -94,6 +96,12 @@ const delMeetingRecord = () => {
 </script>
 
 <style lang="scss" scoped>
+.reach-bottom {
+  text-align: center;
+  line-height: 40px;
+  color: var(--text2);
+  font-size: 16px;
+}
 .history-item {
   margin: 10px 20px;
   background: #fff;

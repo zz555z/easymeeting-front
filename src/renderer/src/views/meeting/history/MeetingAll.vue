@@ -7,10 +7,12 @@
     </el-tabs>
   </div>
   <MeetingHistory ref="meetingHistoryRef" v-if="activeName === 'history'"></MeetingHistory>
+  <MeetingReserve ref="meetingReserveRef" v-if="activeName === 'reserve'"></MeetingReserve>
 </template>
 
 <script setup>
-import MeetingHistory from './MeetingHistory.vue'
+import MeetingReserve from '../history/MeetingReserve.vue'
+import MeetingHistory from '../history/MeetingHistory.vue'
 import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 const { proxy } = getCurrentInstance()
