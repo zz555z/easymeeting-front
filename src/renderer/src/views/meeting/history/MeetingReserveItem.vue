@@ -15,10 +15,12 @@
 
       <div class="meeting-user-panel">
         <div class="meeting-name">{{ data.meetingName }}</div>
-        <div class="meeting-user">发起人 {{ data.nickName }} · {{ data.meetingId }}</div>
+        <!-- <div class="meeting-user">发起人 {{ data.createUserName }} · {{ data.meetingId }}</div> -->
+        <div class="meeting-user">会议号: {{ data.meetingId }}</div>
+        <div class="meeting-user">发起人: {{ data.createUserName }}</div>
       </div>
       <div class="meeting-op">
-        <div class="iconfont icon-close" @click="delMeetingRecord"></div>
+        <div class="iconfont icon-close-bold" @click="delMeetingRecord"></div>
       </div>
     </div>
   </div>
@@ -46,7 +48,7 @@ const delMeetingRecord = () => {
     message: '确定要删除吗？',
     okfun: async () => {
       let result = await proxy.Request({
-        url: proxy.Api.delMeetingReserve,
+        url: proxy.Api.delMeetingRecord,
         params: {
           meetingId: props.data.meetingId
         }
@@ -75,6 +77,7 @@ const delMeetingRecord = () => {
   border-radius: 5px;
   padding: 20px;
   &:hover {
+    background: #e7f0f4; /* 默认淡蓝色背景 */
     .meeting-info {
       .meeting-op {
         display: flex;
@@ -115,7 +118,7 @@ const delMeetingRecord = () => {
         color: #656565;
         cursor: pointer;
       }
-      .icon-close {
+      .icon-close-bold {
         margin-right: 10px;
         font-weight: bold;
       }

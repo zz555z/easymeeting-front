@@ -223,10 +223,10 @@ changeCheckCode()
 </script>
 
 <style lang="scss" scoped>
-// .header {
-//   position: relative;
-//   z-index: 20; // 设置更高的层级
-// }
+.header {
+  position: relative;
+  z-index: 20; // 设置更高的层级
+}
 .title {
   height: 30px;
   -webkit-app-regoin: drag;
@@ -341,7 +341,7 @@ changeCheckCode()
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // z-index: 10; // 设置较低的层级
+  z-index: 10; // 设置较低的层级
 
   /* 让背景透明，可不设置 backgroundColor，或者设置 rgba 透明值，这里若想面板背景也透明可这样写：background-color: rgba(255, 255, 255, 0);  */
 }

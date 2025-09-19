@@ -33,6 +33,7 @@
         </div>
       </div>
       <div class="bottom-menus">
+        <!-- {{ userInfoStore.userInfo.admin }} -->
         <template v-for="item in leftBottomMenus">
           <div
             :class="['menu-item', item.codes.includes(route.meta.code) ? 'active' : '']"
@@ -101,7 +102,7 @@ const leftBottomMenus = [
     onlyAdmin: false
   },
   {
-    icon: 'super_admin',
+    icon: 'ziyuanxhdpi',
     codes: [],
     btnType: 'admin',
     onlyAdmin: true

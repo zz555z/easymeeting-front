@@ -6,6 +6,7 @@
       <el-tab-pane label="待开会议" name="reserve"></el-tab-pane>
     </el-tabs>
   </div>
+  <!-- {{ activeName }} -->
   <MeetingHistory ref="meetingHistoryRef" v-if="activeName === 'history'"></MeetingHistory>
   <MeetingReserve ref="meetingReserveRef" v-if="activeName === 'reserve'"></MeetingReserve>
 </template>

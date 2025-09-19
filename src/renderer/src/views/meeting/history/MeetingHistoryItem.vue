@@ -108,6 +108,8 @@ const delMeetingRecord = () => {
   border-radius: 5px;
   padding: 20px;
   &:hover {
+    background: #e7f0f4; /* 默认淡蓝色背景 */
+
     .meeting-panel {
       .content-panel {
         .meeting-name-panel {

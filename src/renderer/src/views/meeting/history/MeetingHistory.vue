@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import MeetingHistoryItem from './MeetingReserveItem.vue'
+import MeetingHistoryItem from './MeetingHistoryItem.vue'
 import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 const { proxy } = getCurrentInstance()
